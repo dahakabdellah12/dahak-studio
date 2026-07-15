@@ -1,0 +1,50 @@
+﻿"use client";
+
+import { motion } from "framer-motion";
+
+const fields = [
+  { label: "الاسم", value: "Dahak Abdellah" },
+  { label: "البلد", value: "الجزائر" },
+  { label: "الخبرة", value: "1 - 3 سنوات" },
+  { label: "التقنية الأساسية", value: "C#" },
+  { label: "التخصص", value: "تطبيقات الهاتف و سطح المكتب، ألعاب، مواقع ويب" },
+  { label: "الاهتمام", value: "المصادر المفتوحة" },
+];
+
+export default function AboutPage() {
+  return (
+    <div className="pt-24 pb-16">
+      <div className="mx-auto max-w-2xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-blue">
+            من أنا
+          </p>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            Dahak Abdellah
+          </h1>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mt-10 glass-card rounded-2xl divide-y divide-border"
+        >
+          {fields.map((field) => (
+            <div
+              key={field.label}
+              className="flex items-center justify-between px-6 py-4"
+            >
+              <span className="text-sm text-muted-foreground">{field.label}</span>
+              <span className="font-medium">{field.value}</span>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </div>
+  );
+}
