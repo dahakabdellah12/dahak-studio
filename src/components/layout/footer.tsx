@@ -72,7 +72,7 @@ export function Footer() {
         <div className="mt-10 border-t border-border pt-6">
           <p className="text-center text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()}{" "}
-            <Link href="/legal" className="hover:text-foreground transition-colors">
+            <Link href="/legal" className="border-b border-dashed border-muted-foreground/50 hover:border-foreground hover:text-foreground transition-colors">
               {siteConfig.name}
             </Link>
             . جميع الحقوق محفوظة.

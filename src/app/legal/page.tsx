@@ -18,7 +18,7 @@ export default function LegalPage() {
             className="mb-8 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowRight className="h-4 w-4 rotate-180" />
-            العودة للموقع
+            الرجوع
           </Link>
 
           <h1 className="mt-4 text-4xl font-bold tracking-tight">
