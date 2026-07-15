@@ -281,8 +281,21 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
               type="url"
               value={thumbnail}
               onChange={(e) => setThumbnail(e.target.value)}
+              placeholder="https://example.com/logo.png"
               className={inputClass}
             />
+            {thumbnail && (
+              <div className="mt-3 flex items-center gap-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={thumbnail}
+                  alt="معاينة اللوجو"
+                  className="h-14 w-14 rounded-xl border border-border object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
+                <span className="text-xs text-muted-foreground">معاينة اللوجو</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
