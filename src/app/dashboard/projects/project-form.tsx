@@ -276,7 +276,7 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className={labelClass}>رابط الصورة المصغرة</label>
+            <label className={labelClass}>لوجو المشروع</label>
             <input
               type="url"
               value={thumbnail}

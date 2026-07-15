@@ -109,7 +109,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (pathname.startsWith("/api/projects")) {
+  if (pathname.startsWith("/api/projects") || pathname.startsWith("/api/social")) {
     const method = request.method;
     if (method === "GET") {
       const res = NextResponse.next();
@@ -127,5 +127,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/projects/:path*", "/api/auth/:path*"],
+  matcher: ["/dashboard/:path*", "/api/projects/:path*", "/api/social/:path*", "/api/auth/:path*"],
 };

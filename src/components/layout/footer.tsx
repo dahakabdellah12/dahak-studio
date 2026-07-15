@@ -1,12 +1,7 @@
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
 import { navLinks } from "@/lib/data/navigation";
 import { siteConfig } from "@/lib/data/site";
-import { GithubIcon } from "@/components/social-icons";
-
-const iconMap: Record<string, React.ReactNode> = {
-  github: <GithubIcon className="h-4.5 w-4.5" />,
-};
+import { SocialLinksList } from "@/components/social-links";
 
 export function Footer() {
   return (
@@ -52,20 +47,7 @@ export function Footer() {
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
               وسائل التواصل :
             </h3>
-            <div className="flex gap-5">
-              {siteConfig.socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-muted-foreground transition-all hover:bg-blue/10 hover:text-blue"
-                  aria-label={social.name}
-                >
-                  {iconMap[social.icon] ?? <ExternalLink className="h-4.5 w-4.5" />}
-                </a>
-              ))}
-            </div>
+            <SocialLinksList className="flex gap-5" />
           </div>
         </div>
 

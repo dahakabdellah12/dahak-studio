@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { siteConfig } from "@/lib/data/site";
+import { SocialLinksFull } from "@/components/social-links";
 
 export default function LegalPage() {
   return (
@@ -111,28 +111,15 @@ export default function LegalPage() {
               لأي استفسارات حول هذه الشروط، يمكنك التواصل عبر المنصات التالية:
             </p>
             <ul className="space-y-2">
-              {siteConfig.email && (
-                <li>
-                  <a
-                    href={`mailto:${siteConfig.email}`}
-                    className="text-blue hover:underline"
-                  >
-                    البريد الإلكتروني: {siteConfig.email}
-                  </a>
-                </li>
-              )}
-              {siteConfig.socialLinks.map((social) => (
-                <li key={social.name}>
-                  <a
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue hover:underline"
-                  >
-                    {social.name}: {social.url}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a
+                  href="mailto:dahakstudio@gmail.com"
+                  className="text-blue hover:underline"
+                >
+                  البريد الإلكتروني: dahakstudio@gmail.com
+                </a>
+              </li>
+              <SocialLinksFull />
             </ul>
           </section>
         </motion.div>
