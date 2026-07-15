@@ -1,1 +1,32 @@
-﻿[]
+[
+  {
+    "id": "d0755e84-ae58-42c1-b244-623f629dddf3",
+    "slug": "wifi-keys",
+    "name": "Wifi Keys",
+    "shortDescription": "يستخرج كلمات سر الواي فاي من أسماء الشبكات باستخدام خوارزمية استبدال احرف مخصصة",
+    "fullDescription": "",
+    "thumbnail": "",
+    "screenshots": [],
+    "category": "mobile",
+    "technologies": [
+      "C#"
+    ],
+    "status": "released",
+    "platforms": [
+      "android"
+    ],
+    "version": "1.0",
+    "lastUpdated": "2026-07-15",
+    "githubUrl": "",
+    "websiteUrl": "",
+    "downloadUrl": "",
+    "docsUrl": "",
+    "license": "",
+    "stars": 0,
+    "downloads": 0,
+    "featured": false,
+    "features": [],
+    "changelog": [],
+    "timeline": []
+  }
+]
