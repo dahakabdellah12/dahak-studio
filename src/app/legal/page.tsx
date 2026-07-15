@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { siteConfig } from "@/lib/data/site";
 
 export default function LegalPage() {
   return (
@@ -106,21 +107,33 @@ export default function LegalPage() {
             <h2 className="mb-3 text-lg font-semibold text-foreground">
               التواصل
             </h2>
-            <p>
-              لأي استفسارات حول هذه الشروط، يمكنك التواصل عبر{" "}
-              <Link href="/contact" className="text-blue hover:underline">
-                صفحة الاتصال
-              </Link>{" "}
-              أو عبر{" "}
-              <a
-                href="https://github.com/dahakabdellah12"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue hover:underline"
-              >
-                GitHub
-              </a>.
+            <p className="mb-4">
+              لأي استفسارات حول هذه الشروط، يمكنك التواصل عبر المنصات التالية:
             </p>
+            <ul className="space-y-2">
+              {siteConfig.email && (
+                <li>
+                  <a
+                    href={`mailto:${siteConfig.email}`}
+                    className="text-blue hover:underline"
+                  >
+                    البريد الإلكتروني: {siteConfig.email}
+                  </a>
+                </li>
+              )}
+              {siteConfig.socialLinks.map((social) => (
+                <li key={social.name}>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue hover:underline"
+                  >
+                    {social.name}: {social.url}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </section>
         </motion.div>
       </div>
