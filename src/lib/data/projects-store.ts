@@ -33,7 +33,8 @@ async function fetchFile(filePath: string): Promise<GitHubFile | null> {
   });
   if (!res.ok) return null;
   const data = await res.json();
-  return { sha: data.sha, content: atob(data.content.replace(/\n/g, "")) };
+  const decoded = atob(data.content.replace(/\n/g, ""));
+  return { sha: data.sha, content: decodeURIComponent(escape(decoded)) };
 }
 
 async function updateFile(filePath: string, content: string, sha: string | null, message: string): Promise<boolean> {
