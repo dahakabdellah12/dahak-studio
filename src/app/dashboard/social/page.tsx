@@ -49,7 +49,10 @@ export default function SocialLinksPage() {
     try {
       const res = await fetch("/api/social", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "xmlhttprequest",
+        },
         body: JSON.stringify({ links }),
       });
       if (res.ok) {

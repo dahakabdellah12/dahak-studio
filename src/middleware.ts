@@ -1,5 +1,7 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
 
+const SESSION_COOKIE = "dahak_session";
+
 function getSessionSecret(): string {
   const secret = process.env.DASHBOARD_SESSION_SECRET;
   if (!secret) throw new Error("DASHBOARD_SESSION_SECRET is not set");
@@ -49,11 +51,15 @@ const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
 
-function checkRateLimit(ip: string): boolean {
+function getRateLimitKey(request: NextRequest): string {
+  return request.headers.get("x-real-ip") || "__no_ip__";
+}
+
+function checkRateLimit(key: string): boolean {
   const now = Date.now();
-  const record = loginAttempts.get(ip);
+  const record = loginAttempts.get(key);
   if (!record || now > record.resetAt) {
-    loginAttempts.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    loginAttempts.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
     return true;
   }
   if (record.count >= RATE_LIMIT_MAX) return false;
@@ -61,10 +67,20 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
+function isValidHttpUrl(url: string): boolean {
+  if (!url) return true;
+  try {
+    const parsed = new URL(url);
+    return ["http:", "https:"].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
 function addSecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("X-XSS-Protection", "1; mode=block");
+  response.headers.set("X-XSS-Protection", "0");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set(
     "Permissions-Policy",
@@ -74,18 +90,24 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
     "Strict-Transport-Security",
     "max-age=63072000; includeSubDomains; preload"
   );
+  response.headers.set(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.githubusercontent.com https://images.unsplash.com https://*.github.com data: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.github.com; frame-ancestors 'none'"
+  );
   return response;
+}
+
+function hasValidCsrfHeader(request: NextRequest): boolean {
+  return request.headers.get("x-requested-with") === "xmlhttprequest" ||
+    request.headers.get("x-csrf-token") !== null;
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/api/auth/login") && request.method === "POST") {
-    const ip =
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      request.headers.get("x-real-ip") ||
-      "unknown";
-    if (!checkRateLimit(ip)) {
+    const key = getRateLimitKey(request);
+    if (!checkRateLimit(key)) {
       return NextResponse.json(
         { error: "Too many attempts. Try again later." },
         { status: 429 }
@@ -95,7 +117,7 @@ export async function middleware(request: NextRequest) {
 
   if (pathname.startsWith("/dashboard")) {
     if (pathname === "/dashboard/login") {
-      const token = request.cookies.get("dahak_session")?.value;
+      const token = request.cookies.get(SESSION_COOKIE)?.value;
       if (token && (await verifySessionToken(token))) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
@@ -103,7 +125,7 @@ export async function middleware(request: NextRequest) {
       return addSecurityHeaders(res);
     }
 
-    const token = request.cookies.get("dahak_session")?.value;
+    const token = request.cookies.get(SESSION_COOKIE)?.value;
     if (!token || !(await verifySessionToken(token))) {
       return NextResponse.redirect(new URL("/dashboard/login", request.url));
     }
@@ -116,7 +138,11 @@ export async function middleware(request: NextRequest) {
       return addSecurityHeaders(res);
     }
 
-    const token = request.cookies.get("dahak_session")?.value;
+    if (!hasValidCsrfHeader(request)) {
+      return NextResponse.json({ error: "Missing CSRF header" }, { status: 403 });
+    }
+
+    const token = request.cookies.get(SESSION_COOKIE)?.value;
     if (!token || !(await verifySessionToken(token))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

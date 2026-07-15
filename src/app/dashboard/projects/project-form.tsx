@@ -95,7 +95,10 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
 
       const res = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "xmlhttprequest",
+        },
         body: JSON.stringify(data),
       });
 

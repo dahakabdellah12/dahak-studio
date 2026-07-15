@@ -16,7 +16,10 @@ export function DeleteProjectButton({
     if (!confirm(`هل أنت متأكد من حذف "${name}"؟`)) return;
 
     try {
-      const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/projects/${id}`, {
+        method: "DELETE",
+        headers: { "X-Requested-With": "xmlhttprequest" },
+      });
       if (res.ok) {
         router.refresh();
       } else {

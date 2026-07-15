@@ -1,5 +1,6 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
 import { getProjectById, updateProject, deleteProject } from "@/lib/data/projects-store";
+import { sanitizeString, sanitizeArray, isValidHttpUrl } from "@/lib/utils";
 import type { ProjectCategory, Platform, ProjectStatus } from "@/lib/types";
 
 const MAX_BODY_SIZE = 1024 * 100;
@@ -10,18 +11,12 @@ const VALID_CATEGORIES: ProjectCategory[] = [
 const VALID_PLATFORMS: Platform[] = ["windows", "android", "linux", "web", "ios", "multi"];
 const VALID_STATUSES: ProjectStatus[] = ["released", "in-development", "beta", "archived"];
 
-function sanitizeString(value: unknown, maxLen = 500): string {
-  if (typeof value !== "string") return "";
-  return value.slice(0, maxLen).trim();
-}
-
-function sanitizeArray(value: unknown, maxItems = 20, maxItemLen = 100): string[] {
-  if (!Array.isArray(value)) return [];
-  return value
-    .filter((v): v is string => typeof v === "string")
-    .slice(0, maxItems)
-    .map((v) => v.slice(0, maxItemLen).trim())
-    .filter(Boolean);
+function validateUrlField(value: unknown, fieldName: string): { valid: boolean; error?: string } {
+  const sanitized = sanitizeString(value, 500);
+  if (sanitized && !isValidHttpUrl(sanitized)) {
+    return { valid: false, error: `Invalid ${fieldName}` };
+  }
+  return { valid: true };
 }
 
 export async function GET(
@@ -35,7 +30,8 @@ export async function GET(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
     return NextResponse.json(project);
-  } catch {
+  } catch (err) {
+    console.error("Failed to fetch project:", err);
     return NextResponse.json({ error: "Failed to fetch project" }, { status: 500 });
   }
 }
@@ -58,14 +54,8 @@ export async function PUT(
     if (body.name !== undefined) data.name = sanitizeString(body.name, 100);
     if (body.shortDescription !== undefined) data.shortDescription = sanitizeString(body.shortDescription, 300);
     if (body.fullDescription !== undefined) data.fullDescription = sanitizeString(body.fullDescription, 5000);
-    if (body.thumbnail !== undefined) data.thumbnail = sanitizeString(body.thumbnail, 500);
-    if (body.screenshots !== undefined) data.screenshots = sanitizeArray(body.screenshots, 10, 500);
     if (body.version !== undefined) data.version = sanitizeString(body.version, 20);
     if (body.lastUpdated !== undefined) data.lastUpdated = sanitizeString(body.lastUpdated, 10);
-    if (body.githubUrl !== undefined) data.githubUrl = sanitizeString(body.githubUrl, 500);
-    if (body.websiteUrl !== undefined) data.websiteUrl = sanitizeString(body.websiteUrl, 500);
-    if (body.downloadUrl !== undefined) data.downloadUrl = sanitizeString(body.downloadUrl, 500);
-    if (body.docsUrl !== undefined) data.docsUrl = sanitizeString(body.docsUrl, 500);
     if (body.license !== undefined) data.license = sanitizeString(body.license, 50);
     if (body.stars !== undefined) data.stars = typeof body.stars === "number" ? Math.max(0, Math.floor(body.stars)) : 0;
     if (body.downloads !== undefined) data.downloads = typeof body.downloads === "number" ? Math.max(0, Math.floor(body.downloads)) : 0;
@@ -73,6 +63,33 @@ export async function PUT(
     if (body.features !== undefined) data.features = sanitizeArray(body.features, 30, 200);
     if (body.changelog !== undefined) data.changelog = Array.isArray(body.changelog) ? body.changelog.slice(0, 50) : [];
     if (body.timeline !== undefined) data.timeline = Array.isArray(body.timeline) ? body.timeline.slice(0, 50) : [];
+
+    const urlFields: [string, string][] = [
+      ["thumbnail", "thumbnail URL"],
+      ["githubUrl", "GitHub URL"],
+      ["websiteUrl", "website URL"],
+      ["downloadUrl", "download URL"],
+      ["docsUrl", "docs URL"],
+    ];
+    for (const [field, label] of urlFields) {
+      if (body[field] !== undefined) {
+        const check = validateUrlField(body[field], label);
+        if (!check.valid) {
+          return NextResponse.json({ error: check.error }, { status: 400 });
+        }
+        data[field] = sanitizeString(body[field], 500);
+      }
+    }
+
+    if (body.screenshots !== undefined) {
+      const shots = sanitizeArray(body.screenshots, 10, 500);
+      for (const s of shots) {
+        if (!isValidHttpUrl(s)) {
+          return NextResponse.json({ error: "Invalid screenshot URL" }, { status: 400 });
+        }
+      }
+      data.screenshots = shots;
+    }
 
     if (body.category !== undefined) {
       data.category = VALID_CATEGORIES.includes(body.category) ? body.category : "desktop";
@@ -104,7 +121,8 @@ export async function PUT(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
     return NextResponse.json(updated);
-  } catch {
+  } catch (err) {
+    console.error("Failed to update project:", err);
     return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
   }
 }
@@ -120,7 +138,8 @@ export async function DELETE(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.error("Failed to delete project:", err);
     return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
   }
 }

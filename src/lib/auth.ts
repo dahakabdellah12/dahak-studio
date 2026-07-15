@@ -1,9 +1,10 @@
 ﻿import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import crypto from "crypto";
+import bcrypt from "bcryptjs";
 
 const SESSION_COOKIE = "dahak_session";
-const SESSION_MAX_AGE = 24 * 60 * 60; // 24 hours in seconds
+const SESSION_MAX_AGE = 24 * 60 * 60;
 
 function getSessionSecret(): string {
   const secret = process.env.DASHBOARD_SESSION_SECRET;
@@ -40,13 +41,14 @@ export function verifySessionToken(token: string): boolean {
   }
 }
 
-export function checkPassword(password: string): boolean {
+export async function checkPassword(password: string): Promise<boolean> {
   const envPassword = process.env.DASHBOARD_PASSWORD;
   if (!envPassword) return false;
-  const a = Buffer.from(password);
-  const b = Buffer.from(envPassword);
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
+  if (password.length < 8) return false;
+  if (envPassword.startsWith("$2")) {
+    return bcrypt.compareSync(password, envPassword);
+  }
+  return bcrypt.compareSync(password, bcrypt.hashSync(envPassword, 10));
 }
 
 export async function createSession(): Promise<void> {
