@@ -59,7 +59,7 @@ export function Timeline() {
                   }`}
                 >
                   <time className="text-xs text-muted-foreground">
-                    {new Date(entry.date).toLocaleDateString("ar-SA", {
+                    {new Date(entry.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",

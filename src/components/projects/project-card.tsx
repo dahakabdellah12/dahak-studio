@@ -123,7 +123,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             {project.lastUpdated && (
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Calendar className="h-3 w-3" />
-                {new Date(project.lastUpdated).toLocaleDateString("ar-SA", {
+                {new Date(project.lastUpdated).toLocaleDateString("en-US", {
                   month: "short",
                   year: "numeric",
                 })}

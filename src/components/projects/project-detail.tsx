@@ -257,7 +257,7 @@ export function ProjectDetail({ project }: { project: Project }) {
                       <div className="flex items-center gap-3 mb-2">
                         <Badge variant="outline">الإصدار {entry.version}</Badge>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(entry.date).toLocaleDateString("ar-SA", {
+                          {new Date(entry.date).toLocaleDateString("en-US", {
                             year: "numeric",
                             month: "long",
                             day: "numeric",
@@ -294,7 +294,7 @@ export function ProjectDetail({ project }: { project: Project }) {
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">آخر تحديث</span>
                     <span>
-                      {new Date(project.lastUpdated).toLocaleDateString("ar-SA", {
+                      {new Date(project.lastUpdated).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
