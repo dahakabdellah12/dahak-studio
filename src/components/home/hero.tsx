@@ -39,13 +39,6 @@ export function Hero() {
           <span className="text-cyan text-shadow-cyan">Dahak</span>
         </motion.h1>
 
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: "6rem" }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mx-auto my-6 h-[2px] bg-gradient-to-r from-cyan via-magenta to-transparent"
-        />
-
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
