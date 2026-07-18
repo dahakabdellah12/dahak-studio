@@ -1,39 +1,5 @@
 [
   {
-    "id": "a1f5cafa-d0e3-49ae-8272-420ef1a242a8",
-    "slug": "deploykit",
-    "name": "DeployKit",
-    "shortDescription": "DeployKit - Delta update tool for .NET desktop apps",
-    "fullDescription": "",
-    "thumbnail": "",
-    "screenshots": [],
-    "category": "open-source",
-    "technologies": [
-      "C#"
-    ],
-    "status": "released",
-    "platforms": [
-      "windows",
-      "linux",
-      "android",
-      "web"
-    ],
-    "version": "",
-    "lastUpdated": "2026-07-18",
-    "githubUrl": "https://github.com/dahakabdellah12/DeployKit",
-    "websiteUrl": "",
-    "downloadUrl": "",
-    "docsUrl": "",
-    "license": "MIT",
-    "stars": 0,
-    "downloads": 0,
-    "featured": false,
-    "features": [],
-    "changelog": [],
-    "timeline": [],
-    "githubRepoId": 1283935466
-  },
-  {
     "id": "88b757bb-7127-467e-b5ba-99ca08774ca9",
     "slug": "wifi-keys",
     "name": "Wifi-Keys",
