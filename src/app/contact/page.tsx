@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { SocialLinksList } from "@/components/social-links";
 
 export default function ContactPage() {
@@ -28,21 +28,6 @@ export default function ContactPage() {
           className="mt-10 space-y-6"
         >
           <div className="glass-card rounded p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded border border-cyan/20 bg-cyan/5">
-                <Mail className="h-4 w-4 text-cyan" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">البريد الإلكتروني</p>
-                <a
-                  href="mailto:dahakstudio@gmail.com"
-                  className="text-sm font-medium text-foreground transition-colors hover:text-cyan"
-                >
-                  dahakstudio@gmail.com
-                </a>
-              </div>
-            </div>
-
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded border border-cyan/20 bg-cyan/5">
                 <MapPin className="h-4 w-4 text-cyan" />
