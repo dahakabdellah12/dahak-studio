@@ -2,6 +2,49 @@ import { NextResponse } from "next/server";
 import { getProjects } from "@/lib/data/projects-store";
 import type { GitHubRepo } from "@/lib/types";
 
+async function fetchReadme(owner: string, repo: string, token: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/readme`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.encoding === "base64" && data.content) {
+      return atob(data.content.replace(/\n/g, ""));
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchLatestRelease(owner: string, repo: string, token: string): Promise<{ tag: string; date: string } | null> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return { tag: data.tag_name, date: data.published_at?.split("T")[0] || null };
+  } catch {
+    return null;
+  }
+}
+
 export async function GET() {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
@@ -29,24 +72,36 @@ export async function GET() {
     existingProjects.map((p) => p.githubRepoId).filter((id): id is number => id != null)
   );
 
-  const repos = allRepos
-    .filter((r) => !r.fork && r.size > 0)
-    .map((r) => ({
-      id: r.id,
-      name: r.name,
-      full_name: r.full_name,
-      description: r.description,
-      html_url: r.html_url,
-      language: r.language,
-      stargazers_count: r.stargazers_count,
-      topics: r.topics,
-      license: r.license?.spdx_id ?? null,
-      pushed_at: r.pushed_at,
-      created_at: r.created_at,
-      archived: r.archived,
-      size: r.size,
-      alreadyImported: importedIds.has(r.id),
-    }));
+  const filteredRepos = allRepos.filter((r) => !r.fork && r.size > 0);
+
+  const repos = await Promise.all(
+    filteredRepos.map(async (r) => {
+      const [readme, release] = await Promise.all([
+        fetchReadme(r.owner.login, r.name, token),
+        fetchLatestRelease(r.owner.login, r.name, token),
+      ]);
+
+      return {
+        id: r.id,
+        name: r.name,
+        full_name: r.full_name,
+        description: r.description,
+        readme: readme?.substring(0, 5000) || null,
+        html_url: r.html_url,
+        language: r.language,
+        stargazers_count: r.stargazers_count,
+        topics: r.topics,
+        license: r.license?.spdx_id ?? null,
+        pushed_at: r.pushed_at,
+        created_at: r.created_at,
+        archived: r.archived,
+        size: r.size,
+        latestVersion: release?.tag || null,
+        latestReleaseDate: release?.date || null,
+        alreadyImported: importedIds.has(r.id),
+      };
+    })
+  );
 
   return NextResponse.json(repos);
 }

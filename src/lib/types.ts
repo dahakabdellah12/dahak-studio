@@ -55,6 +55,7 @@ export interface GitHubRepo {
   forks_count: number;
   topics: string[];
   license: { spdx_id: string } | null;
+  owner: { login: string };
   pushed_at: string;
   created_at: string;
   archived: boolean;

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { RefreshCw, GitBranch, Star, Download, Check } from "lucide-react";
 
 interface Repo {
@@ -9,6 +8,7 @@ interface Repo {
   name: string;
   full_name: string;
   description: string | null;
+  readme: string | null;
   html_url: string;
   language: string | null;
   stargazers_count: number;
@@ -18,7 +18,83 @@ interface Repo {
   created_at: string;
   archived: boolean;
   size: number;
+  latestVersion: string | null;
+  latestReleaseDate: string | null;
   alreadyImported: boolean;
+}
+
+function parseFeaturesFromReadme(readme: string): string[] {
+  const features: string[] = [];
+  const lines = readme.split("\n");
+  let inFeaturesSection = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const lower = trimmed.toLowerCase();
+
+    if (
+      lower.startsWith("## ") &&
+      (lower.includes("feature") ||
+        lower.includes("مميز") ||
+        lower.includes("highlight") ||
+        lower.includes("what") ||
+        lower.includes("capability"))
+    ) {
+      inFeaturesSection = true;
+      continue;
+    }
+
+    if (inFeaturesSection && trimmed.startsWith("## ")) {
+      inFeaturesSection = false;
+      continue;
+    }
+
+    if (inFeaturesSection && trimmed.startsWith("- ")) {
+      const feature = trimmed.replace(/^-\s*\[[ x]\]\s*/, "").replace(/^-\s*/, "").trim();
+      if (feature.length > 0 && feature.length < 200) {
+        features.push(feature);
+      }
+    }
+  }
+
+  return features.slice(0, 15);
+}
+
+function detectPlatforms(readme: string, topics: string[]): string[] {
+  const text = (readme + " " + topics.join(" ")).toLowerCase();
+  const platforms: string[] = [];
+
+  if (text.includes("windows") || text.includes("wpf") || text.includes("winforms") || text.includes("win32") || text.includes(".net")) platforms.push("windows");
+  if (text.includes("android") || text.includes("maui") || text.includes("xamarin")) platforms.push("android");
+  if (text.includes("linux") || text.includes("gnome") || text.includes("kde")) platforms.push("linux");
+  if (text.includes("web") || text.includes("react") || text.includes("next.js") || text.includes("nextjs") || text.includes("html") || text.includes("css")) platforms.push("web");
+  if (text.includes("ios") || text.includes("swift") || text.includes("xcode")) platforms.push("ios");
+
+  if (platforms.length === 0) platforms.push("multi");
+  return [...new Set(platforms)] as ("windows" | "android" | "linux" | "web" | "ios" | "multi")[];
+}
+
+function buildImportData(repo: Repo) {
+  const features = parseFeaturesFromReadme(repo.readme || "");
+  const platforms = detectPlatforms(repo.readme || "", repo.topics);
+  const techs = [repo.language, ...repo.topics].filter(Boolean) as string[];
+
+  return {
+    name: repo.name,
+    shortDescription: repo.description || "",
+    fullDescription: repo.readme || "",
+    githubUrl: repo.html_url,
+    technologies: techs,
+    stars: repo.stargazers_count,
+    license: repo.license || "",
+    lastUpdated: repo.pushed_at?.split("T")[0] || "",
+    version: repo.latestVersion?.replace(/^v/, "") || "",
+    category: "open-source" as const,
+    status: repo.archived ? ("archived" as const) : ("released" as const),
+    platforms,
+    features,
+    githubRepoId: repo.id,
+  };
 }
 
 export default function SyncPage() {
@@ -28,7 +104,6 @@ export default function SyncPage() {
   const [imported, setImported] = useState<Set<number>>(new Set());
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const router = useRouter();
 
   const fetchRepos = async () => {
     setLoading(true);
@@ -60,21 +135,7 @@ export default function SyncPage() {
     setMessage("");
     setError("");
 
-    const techs = [repo.language, ...repo.topics].filter(Boolean) as string[];
-
-    const data = {
-      name: repo.name,
-      shortDescription: repo.description || "",
-      githubUrl: repo.html_url,
-      technologies: techs,
-      stars: repo.stargazers_count,
-      license: repo.license || "",
-      lastUpdated: repo.pushed_at?.split("T")[0] || "",
-      category: "open-source" as const,
-      status: repo.archived ? ("archived" as const) : ("released" as const),
-      platforms: ["windows", "linux", "android", "web"] as ("windows" | "linux" | "android" | "web")[],
-      githubRepoId: repo.id,
-    };
+    const data = buildImportData(repo);
 
     try {
       const res = await fetch("/api/projects", {
@@ -111,21 +172,7 @@ export default function SyncPage() {
     let failCount = 0;
 
     for (const repo of unimported) {
-      const techs = [repo.language, ...repo.topics].filter(Boolean) as string[];
-
-      const data = {
-        name: repo.name,
-        shortDescription: repo.description || "",
-        githubUrl: repo.html_url,
-        technologies: techs,
-        stars: repo.stargazers_count,
-        license: repo.license || "",
-        lastUpdated: repo.pushed_at?.split("T")[0] || "",
-        category: "open-source" as const,
-        status: repo.archived ? ("archived" as const) : ("released" as const),
-        platforms: ["windows", "linux", "android", "web"] as ("windows" | "linux" | "android" | "web")[],
-        githubRepoId: repo.id,
-      };
+      const data = buildImportData(repo);
 
       try {
         const res = await fetch("/api/projects", {
@@ -232,7 +279,7 @@ export default function SyncPage() {
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold">{repo.name}</h3>
                       {repo.archived && (
                         <span className="rounded border border-border bg-secondary/50 px-2 py-0.5 text-[10px] text-muted-foreground">
@@ -242,6 +289,11 @@ export default function SyncPage() {
                       {repo.license && (
                         <span className="rounded border border-border bg-secondary/50 px-2 py-0.5 text-[10px] text-muted-foreground font-mono">
                           {repo.license}
+                        </span>
+                      )}
+                      {repo.latestVersion && (
+                        <span className="rounded border border-cyan/20 bg-cyan/5 px-2 py-0.5 text-[10px] font-mono text-cyan">
+                          {repo.latestVersion}
                         </span>
                       )}
                       {isImported && (

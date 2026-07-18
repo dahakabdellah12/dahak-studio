@@ -56,7 +56,6 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
   const [websiteUrl, setWebsiteUrl] = useState(initial?.websiteUrl || "");
   const [downloadUrl, setDownloadUrl] = useState(initial?.downloadUrl || "");
   const [license, setLicense] = useState(initial?.license || "");
-  const [featured, setFeatured] = useState(initial?.featured || false);
   const [featuresText, setFeaturesText] = useState(initial?.features?.join("\n") || "");
 
   const togglePlatform = (p: Platform) => {
@@ -85,7 +84,6 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
       websiteUrl,
       downloadUrl,
       license,
-      featured,
       features: featuresText.split("\n").filter(Boolean),
     };
 
@@ -325,15 +323,6 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
               placeholder={"ميزة 1\nميزة 2\nميزة 3"}
             />
           </div>
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={featured}
-              onChange={(e) => setFeatured(e.target.checked)}
-              className="h-4 w-4 rounded border-border accent-cyan"
-            />
-            <span className="text-sm">مشروع مميز</span>
-          </label>
         </div>
       </div>
 
