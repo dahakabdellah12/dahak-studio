@@ -42,7 +42,7 @@ export default function AboutPage() {
           {fields.map((field) => (
             <div
               key={field.label}
-              className="flex items-center justify-between px-6 py-4"
+              className="flex cursor-pointer items-center justify-between px-6 py-4 transition-colors hover:bg-cyan/5"
             >
               <span className="text-sm text-muted-foreground">{field.label}</span>
               <span className="font-medium text-foreground">{field.value}</span>

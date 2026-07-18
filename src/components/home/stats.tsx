@@ -92,7 +92,7 @@ export function Stats() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass-card group relative rounded border p-6 text-center"
+              className="glass-card group relative cursor-pointer rounded border p-6 text-center"
             >
               <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
               <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
