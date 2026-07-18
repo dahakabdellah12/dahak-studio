@@ -67,7 +67,7 @@ export default function ContactPage() {
             <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase">
               // شبكاتي
             </h3>
-            <SocialLinksList />
+            <SocialLinksList className="flex gap-3" />
           </div>
         </motion.div>
       </div>
