@@ -34,10 +34,8 @@ export default function AboutPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-10 glass-card relative rounded border divide-y divide-border"
         >
-          <div className="absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
-          <div className="absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
-          <div className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-cyan/30" />
-          <div className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-cyan/30" />
+          <div className="pointer-events-none absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
+          <div className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
 
           {fields.map((field) => (
             <div
