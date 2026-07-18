@@ -1,46 +1,5 @@
 [
   {
-    "id": "93c81e37-81de-49b2-9244-3257fa731a68",
-    "slug": "deploykit",
-    "name": "DeployKit",
-    "shortDescription": "DeployKit - Delta update tool for .NET desktop apps",
-    "fullDescription": "# DeployKit ð\n\n**Self-hosted update distribution server** for desktop applications. Each developer deploys their own instance â no central hosting, full control.\n\n![GitHub](https://img.shields.io/github/license/dahakabdellah12/DeployKit)\n![GitHub last commit](https://img.shields.io/github/last-commit/dahakabdellah12/DeployKit)\n![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)\n![Docker](https://img.shields.io/badge/docker-ready-2496ED)\n\n---\n\n## Features\n\n- **Self-hosted** â Deploy on your own server (Docker, Render, VPS)\n- **Dashboard** â Web UI to register apps, generate API keys, upload updates\n- **Update API** â Public endpoints for client apps to check / retrieve updates\n- **Secure** â BCrypt passwords, Bearer token auth, rate limiting, CSP headers, audit logging, account lockout\n- **Lightweight** â SQLite database, single Docker container (~200 MB)\n- **Cross-platform** â Works on Windows, Linux, macOS\n- **NuGet SDK** â One-line integration for WPF desktop apps\n\n---\n\n## Quick Start\n\n### Docker (recommended)\n\n```bash\ngit clone git@github.com:dahakabdellah12/DeployKit.git\ncd DeployKit\ndocker compose up -d\n```\n\nOpen `http://localhost:5000` and create your admin account.\n\n Data persists in a Docker volume (`deploykit-data`) at `/data`.\n\n### Deploy to Render\n\n1. Fork / push this repo to GitHub\n2. Create a **Web Service** on Render â connect your repo\n3. Choose **Docker** as the environment\n4. Add a **Disk** mount at `/data` (1 GB)\n5. Deploy â Render detects `render.yaml` automatically\n\n### Manual (.NET CLI)\n\n```bash\ndotnet publish DeployKit.Cloud.Api -c Release -o out\nASPNETCORE_URLS=http://0.0.0.0:5000 dotnet out/DeployKit.Cloud.Api.dll\n```\n\nSet `DataPath` and `ConnectionStrings__Sqlite` for persistent storage.\n\n---\n\n## Usage\n\n### First Run\n\n1. Open the dashboard URL in your browser\n2. Create the admin account (username + password)\n3. Register your first app â get an **API Key**\n4. Upload an update package\n\n **Single-user per instance.** Each developer hosts their own server.\n\n### Client Integration (WPF)\n\nInstall the SDK:\n\n```bash\ndotnet add package DeployKit.Integration\n```\n\nAdd one line to `App.xaml.cs`:\n\n```csharp\nDeployKit.Integration.DeployKit.Configure(YOUR_API_KEY, https://your-server.com);\n```\n\nThats it. Updates are checked automatically and users are prompted to update.\n\n### API â Check for Updates\n\n```\nGET /v1/check?X-Api-Key=YOUR_APP_KEYv=1.0.0\n```\n\n```json\n{\n  hasUpdate: true,\n  latestVersion: 1.1.0,\n  downloadUrl: https://...,\n  packageHash: sha256hex...,\n  isMandatory: false,\n  releaseNotes: Bug fixes and improvements\n}\n```\n\n---\n\n## API Reference\n\n### Public Endpoints\n\n| Method | Path | Auth | Rate Limit | Description |\n|--------|------|------|------------|-------------|\n| `GET` | `/v1/check` | `X-Api-Key` | 100/min | Check for updates |\n| `GET` | `/v1/version` | `X-Api-Key` | 100/min | Get latest version |\n| `GET` | `/v1/admin/status` | None | 100/min | Check if admin exists |\n\n### Authenticated Endpoints (Bearer token)\n\n| Method | Path | Rate Limit | Description |\n|--------|------|------------|-------------|\n| `POST` | `/v1/admin/setup` | 5/min | Create admin account |\n| `POST` | `/v1/admin/login` | 5/min | Login |\n| `POST` | `/v1/admin/refresh` | 30/min | Extend token expiry |\n| `POST` | `/v1/admin/logout` | 30/min | Invalidate token |\n| `POST` | `/v1/admin/register` | 30/min | Register a new app |\n| `GET` | `/v1/admin/apps` | 30/min | List apps |\n| `GET` | `/v1/admin/apps/{key}` | 30/min | App details + packages |\n| `DELETE` | `/v1/admin/apps/{key}` | 30/min | Delete app |\n| `POST` | `/v1/admin/apps/{key}/regenerate-key` | 30/min | Regenerate API key |\n| `GET` | `/v1/admin/packages/{id}` | 30/min | Get package details |\n| `PATCH` | `/v1/admin/packages/{id}` | 30/min | Update package |\n| `DELETE` | `/v1/admin/packages/{id}` | 30/min | Delete package |\n| `POST` | `/v1/upload` | 10/min | Upload new version |\n\n---\n\n## Security\n\n| Control | Implementation |\n|---------|---------------|\n| **Passwords** | BCrypt (no minimum length / complexity) |\n| **Auth tokens** | GUID, 8-hour expiry, sliding extension on each request |\n| **Account lockout** | 5 failed attempts â 15-minute lock |\n| **Rate limiting** | Sliding window per endpoint group |\n| **CSP** | `default-src self`, `script-src self`, `style-src self unsafe-inline` |\n| **HSTS** | Enabled |\n| **Headers** | `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin` |\n| **Audit log** | All admin actions logged (IP, timestamp, user) |\n| **Data encryption** | DPAPI with random 16-byte entropy (per-machine) |\n| **Package integrity** | SHA256 hash verification on download and extraction |\n| **Body limit** | 100 MB max request body |\n\n---\n\n## Project Structure\n\n```\nDeployKit/\nâââ DeployKit.Cloud.Api/     # Server â ASP.NET Core Minimal API\nâ   âââ Endpoints/           # API route handlers\nâ   âââ Helpers/",
-    "thumbnail": "",
-    "screenshots": [],
-    "category": "open-source",
-    "technologies": [
-      "C#"
-    ],
-    "status": "released",
-    "platforms": [
-      "windows",
-      "linux",
-      "web"
-    ],
-    "version": "1.1.0",
-    "lastUpdated": "2026-07-18",
-    "githubUrl": "https://github.com/dahakabdellah12/DeployKit",
-    "websiteUrl": "",
-    "downloadUrl": "",
-    "docsUrl": "",
-    "license": "MIT",
-    "stars": 0,
-    "downloads": 0,
-    "featured": false,
-    "features": [
-      "**Self-hosted** â Deploy on your own server (Docker, Render, VPS)",
-      "**Dashboard** â Web UI to register apps, generate API keys, upload updates",
-      "**Update API** â Public endpoints for client apps to check / retrieve updates",
-      "**Secure** â BCrypt passwords, Bearer token auth, rate limiting, CSP headers, audit logging, account lockout",
-      "**Lightweight** â SQLite database, single Docker container (~200 MB)",
-      "**Cross-platform** â Works on Windows, Linux, macOS",
-      "**NuGet SDK** â One-line integration for WPF desktop apps"
-    ],
-    "changelog": [],
-    "timeline": [],
-    "githubRepoId": 1283935466
-  },
-  {
     "id": "f41ee072-233a-4bcf-8a8a-313ad593e541",
     "slug": "wifi-keys",
     "name": "Wifi-Keys",
