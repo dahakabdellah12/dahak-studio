@@ -10,8 +10,21 @@ const iconMap: Record<string, React.ReactNode> = {
   email: <Mail className="h-4.5 w-4.5" />,
 };
 
-export function SocialLinksList({ className }: { className?: string }) {
-  const [links, setLinks] = useState<SocialLink[]>([]);
+function SocialSkeleton({ count = 2 }: { count?: number }) {
+  return (
+    <>
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="h-9 w-9 animate-pulse rounded border border-border/30 bg-secondary/20"
+        />
+      ))}
+    </>
+  );
+}
+
+export function SocialLinksList({ className, skeletonCount }: { className?: string; skeletonCount?: number }) {
+  const [links, setLinks] = useState<SocialLink[] | null>(null);
 
   useEffect(() => {
     fetch("/api/social")
@@ -19,6 +32,10 @@ export function SocialLinksList({ className }: { className?: string }) {
       .then((data) => setLinks(Array.isArray(data) ? data : []))
       .catch(() => setLinks([]));
   }, []);
+
+  if (links === null) {
+    return <div className={className}><SocialSkeleton count={skeletonCount} /></div>;
+  }
 
   if (links.length === 0) return null;
 

@@ -48,7 +48,7 @@ export function Footer() {
             <h3 className="mb-4 text-xs font-bold tracking-[0.2em] text-cyan/50 uppercase">
               وسائل التواصل //
             </h3>
-            <SocialLinksList className="flex gap-4" />
+            <SocialLinksList className="flex gap-4" skeletonCount={2} />
           </div>
         </div>
 
