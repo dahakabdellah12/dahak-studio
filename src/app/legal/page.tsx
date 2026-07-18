@@ -111,14 +111,6 @@ export default function LegalPage() {
               لأي استفسارات حول هذه الشروط، يمكنك التواصل عبر المنصات التالية:
             </p>
             <ul className="space-y-2">
-              <li>
-                <a
-                  href="mailto:dahakstudio@gmail.com"
-                  className="text-blue hover:underline"
-                >
-                  البريد الإلكتروني: dahakstudio@gmail.com
-                </a>
-              </li>
               <SocialLinksFull />
             </ul>
           </section>
