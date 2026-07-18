@@ -7,6 +7,7 @@ import type { SocialLink } from "@/lib/types";
 
 const iconMap: Record<string, React.ReactNode> = {
   github: <GithubIcon className="h-4.5 w-4.5" />,
+  email: <ExternalLink className="h-4.5 w-4.5" />,
 };
 
 export function SocialLinksList({ className }: { className?: string }) {
@@ -29,7 +30,7 @@ export function SocialLinksList({ className }: { className?: string }) {
           href={social.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-muted-foreground transition-all hover:bg-blue/10 hover:text-blue"
+          className="flex h-9 w-9 items-center justify-center rounded border border-border bg-secondary/50 text-muted-foreground transition-all hover:border-cyan/30 hover:text-cyan hover:shadow-[0_0_10px_rgba(0,240,255,0.1)]"
           aria-label={social.name}
         >
           {iconMap[social.icon] ?? <ExternalLink className="h-4.5 w-4.5" />}
@@ -59,7 +60,7 @@ export function SocialLinksFull() {
             href={social.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue hover:underline"
+            className="text-sm text-muted-foreground transition-colors hover:text-cyan"
           >
             {social.name}: {social.url}
           </a>

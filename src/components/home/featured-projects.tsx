@@ -33,8 +33,8 @@ export function FeaturedProjects() {
           className="mb-12 flex items-end justify-between"
         >
           <div>
-            <p className="mb-2 text-sm font-medium uppercase tracking-wider text-blue">
-              مميزة
+            <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+              // مميزة
             </p>
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               مشاريع مختارة
@@ -42,7 +42,7 @@ export function FeaturedProjects() {
           </div>
           <Link
             href="/projects"
-            className="hidden items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:flex"
+            className="hidden items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-cyan sm:flex"
           >
             عرض الكل
             <ArrowRight className="h-4 w-4" />
@@ -58,7 +58,7 @@ export function FeaturedProjects() {
         <div className="mt-8 text-center sm:hidden">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-cyan"
           >
             عرض كل المشاريع
             <ArrowRight className="h-4 w-4" />

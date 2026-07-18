@@ -4,19 +4,18 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ExternalLink, Download, Calendar } from "lucide-react";
 import { GithubIcon } from "@/components/social-icons";
-import { Badge } from "@/components/ui/badge";
 import type { Project } from "@/lib/types";
 
 function getStatusColor(status: Project["status"]) {
   switch (status) {
     case "released":
-      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+      return "border-emerald-500/30 text-emerald-400 bg-emerald-500/5";
     case "in-development":
-      return "bg-blue/10 text-blue border-blue/20";
+      return "border-cyan/30 text-cyan bg-cyan/5";
     case "beta":
-      return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+      return "border-yellow-neon/30 text-yellow-neon bg-yellow-neon/5";
     case "archived":
-      return "bg-muted text-muted-foreground border-border";
+      return "border-border text-muted-foreground bg-secondary/50";
   }
 }
 
@@ -60,8 +59,13 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     >
       <Link
         href={`/projects/${project.slug}`}
-        className="glass-card group flex flex-col overflow-hidden rounded-2xl transition-all"
+        className="glass-card group relative flex flex-col overflow-hidden rounded border transition-all hover:shadow-[0_0_30px_rgba(0,240,255,0.08)]"
       >
+        <div className="absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
+        <div className="absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
+        <div className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-cyan/30" />
+        <div className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-cyan/30" />
+
         {project.thumbnail ? (
           <div className="relative aspect-video overflow-hidden bg-secondary/30">
             <img
@@ -69,11 +73,12 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
               alt={project.name}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="scanlines pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-20" />
           </div>
         ) : (
-          <div className="flex aspect-video items-center justify-center bg-gradient-to-br from-blue/10 via-transparent to-blue/5">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue/10 text-2xl font-bold text-blue transition-transform group-hover:scale-110">
+          <div className="flex aspect-video items-center justify-center bg-gradient-to-br from-cyan/5 via-transparent to-magenta/5">
+            <div className="flex h-16 w-16 items-center justify-center rounded border border-cyan/20 bg-cyan/5 text-2xl font-bold text-cyan transition-all group-hover:border-cyan/40 group-hover:shadow-[0_0_20px_rgba(0,240,255,0.2)]">
               {project.name.charAt(0)}
             </div>
           </div>
@@ -81,15 +86,14 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
         <div className="flex flex-1 flex-col p-5">
           <div className="mb-2 flex items-start justify-between gap-2">
-            <h3 className="font-semibold text-foreground transition-colors group-hover:text-blue">
+            <h3 className="font-semibold text-foreground transition-colors group-hover:text-cyan">
               {project.name}
             </h3>
-            <Badge
-              variant="outline"
-              className={`shrink-0 text-[10px] capitalize ${getStatusColor(project.status)}`}
+            <span
+              className={`shrink-0 rounded border px-2 py-0.5 text-[10px] font-medium ${getStatusColor(project.status)}`}
             >
               {getStatusLabel(project.status)}
-            </Badge>
+            </span>
           </div>
 
           <p className="mb-3 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
@@ -97,8 +101,8 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           </p>
 
           {project.version && (
-            <p className="mb-2 text-xs text-muted-foreground">
-              الإصدار {project.version}
+            <p className="mb-2 font-mono text-xs text-cyan/60">
+              v{project.version}
             </p>
           )}
 
@@ -108,14 +112,17 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
           <div className="mb-4 flex flex-wrap gap-1.5">
             {project.technologies.slice(0, 5).map((tech) => (
-              <Badge key={tech} variant="secondary" className="text-[10px] font-normal">
+              <span
+                key={tech}
+                className="rounded border border-border bg-secondary/50 px-2 py-0.5 text-[10px] text-muted-foreground"
+              >
                 {tech}
-              </Badge>
+              </span>
             ))}
             {project.technologies.length > 5 && (
-              <Badge variant="secondary" className="text-[10px] font-normal">
+              <span className="rounded border border-border bg-secondary/50 px-2 py-0.5 text-[10px] text-muted-foreground">
                 +{project.technologies.length - 5}
-              </Badge>
+              </span>
             )}
           </div>
 
@@ -137,10 +144,10 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             )}
             <div className="mr-auto flex gap-2">
               {project.downloadUrl && (
-                <Download className="h-3.5 w-3.5 text-muted-foreground transition-colors hover:text-blue" />
+                <Download className="h-3.5 w-3.5 text-muted-foreground transition-colors hover:text-cyan" />
               )}
               {project.websiteUrl && (
-                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors hover:text-blue" />
+                <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors hover:text-cyan" />
               )}
             </div>
           </div>

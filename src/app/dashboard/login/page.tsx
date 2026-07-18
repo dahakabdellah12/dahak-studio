@@ -39,9 +39,12 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue/10 text-blue">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded border border-cyan/30 bg-cyan/5 text-cyan shadow-[0_0_30px_rgba(0,240,255,0.15)]">
             <Lock className="h-7 w-7" />
           </div>
+          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan/70 uppercase">
+            // الوصول المحظور
+          </p>
           <h1 className="text-2xl font-bold">لوحة التحكم</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             أدخل كلمة السر للدخول
@@ -55,20 +58,20 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="كلمة السر"
-              className="w-full rounded-xl border border-border bg-secondary/50 px-4 py-3 text-center text-sm outline-none transition-colors focus:border-blue focus:ring-1 focus:ring-blue"
+              className="w-full rounded border border-border bg-secondary/50 px-4 py-3 text-center font-mono text-sm outline-none transition-all focus:border-cyan focus:ring-1 focus:ring-cyan focus:shadow-[0_0_15px_rgba(0,240,255,0.1)]"
               autoFocus
               required
             />
           </div>
 
           {error && (
-            <p className="text-center text-sm text-red-500">{error}</p>
+            <p className="text-center text-sm text-magenta">{error}</p>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-blue py-3 text-sm font-medium text-white shadow-lg shadow-blue/25 transition-all hover:bg-blue-light disabled:opacity-50"
+            className="w-full rounded border border-cyan/40 bg-cyan/10 py-3 text-sm font-medium text-cyan transition-all hover:bg-cyan/20 hover:border-cyan/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.2)] disabled:opacity-50"
           >
             {loading ? "جاري الدخول..." : "دخول"}
           </button>

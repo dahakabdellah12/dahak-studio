@@ -1,26 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Mail, ExternalLink } from "lucide-react";
-import { GithubIcon } from "@/components/social-icons";
-import type { SocialLink } from "@/lib/types";
-
-const iconMap: Record<string, React.ReactNode> = {
-  github: <GithubIcon className="h-5 w-5" />,
-  email: <Mail className="h-5 w-5" />,
-};
+import { Mail, MapPin } from "lucide-react";
+import { SocialLinksList } from "@/components/social-links";
 
 export default function ContactPage() {
-  const [socials, setSocials] = useState<SocialLink[]>([]);
-
-  useEffect(() => {
-    fetch("/api/social")
-      .then((res) => res.json())
-      .then((data) => setSocials(Array.isArray(data) ? data : []))
-      .catch(() => setSocials([]));
-  }, []);
-
   return (
     <div className="pt-24 pb-16">
       <div className="mx-auto max-w-2xl px-6">
@@ -28,59 +12,64 @@ export default function ContactPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-12"
         >
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-blue">
-            تواصل معي
+          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+            // تواصل معي
           </p>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             الاتصال
           </h1>
-          <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            لديك سؤال، تريد التعاون، أو تريد فقط أن تقول مرحاً؟ لا تتردد في
-            التواصل.
-          </p>
         </motion.div>
 
-        <div className="space-y-4">
-          {socials.map((social, i) => (
-            <motion.a
-              key={social.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-              href={social.url}
-              target={social.icon === "email" ? undefined : "_blank"}
-              rel={social.icon === "email" ? undefined : "noopener noreferrer"}
-              className="glass-card flex items-center gap-4 rounded-2xl p-5 transition-all hover:border-blue/30"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue/10 text-blue">
-                {iconMap[social.icon] ?? <ExternalLink className="h-5 w-5" />}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mt-10 space-y-6"
+        >
+          <div className="glass-card relative rounded border p-6 space-y-4">
+            <div className="absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
+            <div className="absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
+            <div className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-cyan/30" />
+            <div className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-cyan/30" />
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded border border-cyan/20 bg-cyan/5">
+                <Mail className="h-4 w-4 text-cyan" />
               </div>
               <div>
-                <p className="font-medium">{social.name}</p>
-                <p className="text-sm text-muted-foreground">{social.url}</p>
-              </div>
-              <ExternalLink className="mr-auto h-4 w-4 text-muted-foreground" />
-            </motion.a>
-          ))}
-
-          {socials.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="glass-card rounded-2xl p-8 text-center"
-            >
-              <p className="text-muted-foreground">
-                لم يتم تكوين روابط التواصل بعد. قم بإضافتها من{" "}
-                <a href="/dashboard/social" className="text-blue hover:underline">
-                  لوحة التحكم
+                <p className="text-xs text-muted-foreground">البريد الإلكتروني</p>
+                <a
+                  href="mailto:dahakstudio@gmail.com"
+                  className="text-sm font-medium text-foreground transition-colors hover:text-cyan"
+                >
+                  dahakstudio@gmail.com
                 </a>
-                .
-              </p>
-            </motion.div>
-          )}
-        </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded border border-cyan/20 bg-cyan/5">
+                <MapPin className="h-4 w-4 text-cyan" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">الموقع</p>
+                <p className="text-sm font-medium text-foreground">الجزائر</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-card relative rounded border p-6">
+            <div className="absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
+            <div className="absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
+            <div className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-cyan/30" />
+            <div className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-cyan/30" />
+            <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase">
+              // شبكاتي
+            </h3>
+            <SocialLinksList />
+          </div>
+        </motion.div>
       </div>
     </div>
   );

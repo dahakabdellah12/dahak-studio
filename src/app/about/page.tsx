@@ -20,8 +20,8 @@ export default function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-blue">
-            من أنا
+          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+            // من أنا
           </p>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Dahak Abdellah
@@ -32,15 +32,20 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-10 glass-card rounded-2xl divide-y divide-border"
+          className="mt-10 glass-card relative rounded border divide-y divide-border"
         >
+          <div className="absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
+          <div className="absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
+          <div className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-cyan/30" />
+          <div className="absolute bottom-0 right-0 h-3 w-3 border-b border-r border-cyan/30" />
+
           {fields.map((field) => (
             <div
               key={field.label}
               className="flex items-center justify-between px-6 py-4"
             >
               <span className="text-sm text-muted-foreground">{field.label}</span>
-              <span className="font-medium">{field.value}</span>
+              <span className="font-medium text-foreground">{field.value}</span>
             </div>
           ))}
         </motion.div>

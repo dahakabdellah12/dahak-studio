@@ -18,8 +18,8 @@ export function Skills() {
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-blue">
-            الخبرات
+          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+            // الخبرات
           </p>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             المهارات والتقنيات
@@ -34,9 +34,14 @@ export function Skills() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass-card rounded-2xl p-6"
+              className="glass-card relative rounded border p-6"
             >
-              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/40" />
+              <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/40" />
+              <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/40" />
+              <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/40" />
+
+              <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase">
                 {category}
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -45,7 +50,7 @@ export function Skills() {
                   .map((skill) => (
                     <span
                       key={skill.name}
-                      className="rounded-lg bg-secondary/80 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-blue/10 hover:text-blue"
+                      className="rounded border border-border bg-secondary/50 px-3 py-1.5 text-sm text-muted-foreground transition-all hover:border-cyan/20 hover:text-cyan hover:shadow-[0_0_10px_rgba(0,240,255,0.05)]"
                     >
                       {skill.name}
                     </span>

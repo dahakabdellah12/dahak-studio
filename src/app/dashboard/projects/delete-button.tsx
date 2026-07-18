@@ -33,7 +33,7 @@ export function DeleteProjectButton({
   return (
     <button
       onClick={handleDelete}
-      className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-500"
+      className="flex h-8 w-8 items-center justify-center rounded border border-border text-muted-foreground transition-all hover:border-magenta/30 hover:text-magenta"
     >
       <Trash2 className="h-4 w-4" />
     </button>

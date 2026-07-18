@@ -27,8 +27,8 @@ export function Timeline() {
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-blue">
-            الرحلة
+          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+            // الرحلة
           </p>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             جدول أعمال التطوير
@@ -36,7 +36,7 @@ export function Timeline() {
         </motion.div>
 
         <div className="relative">
-          <div className="absolute right-[19px] top-0 bottom-0 w-px bg-border md:right-1/2" />
+          <div className="absolute right-[19px] top-0 bottom-0 w-px bg-gradient-to-b from-cyan/20 via-cyan/10 to-transparent md:right-1/2" />
 
           <div className="space-y-8">
             {allTimeline.map((entry, i) => (
@@ -50,15 +50,15 @@ export function Timeline() {
                   i % 2 === 0 ? "md:flex-row" : ""
                 }`}
               >
-                <div className="relative z-10 mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-xs font-medium text-muted-foreground md:absolute md:right-1/2 md:mr-[-20px]">
+                <div className="relative z-10 mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded border border-cyan/30 bg-background text-xs font-bold text-cyan font-mono md:absolute md:right-1/2 md:mr-[-20px]">
                   {new Date(entry.date).getFullYear().toString().slice(2)}
                 </div>
                 <div
-                  className={`glass-card mr-[52px] flex-1 rounded-2xl p-5 md:mr-0 md:w-[calc(50%-40px)] ${
+                  className={`glass-card mr-[52px] flex-1 rounded border p-5 md:mr-0 md:w-[calc(50%-40px)] ${
                     i % 2 === 0 ? "md:ml-auto" : "md:mr-auto"
                   }`}
                 >
-                  <time className="text-xs text-muted-foreground">
+                  <time className="font-mono text-xs text-cyan/60">
                     {new Date(entry.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",

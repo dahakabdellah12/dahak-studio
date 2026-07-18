@@ -26,8 +26,8 @@ export default function ProjectsPage() {
           transition={{ duration: 0.5 }}
           className="mb-10"
         >
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-blue">
-            الأعمال
+          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+            // الأعمال
           </p>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             جميع المشاريع

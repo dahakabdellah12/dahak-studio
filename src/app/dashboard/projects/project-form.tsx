@@ -116,19 +116,22 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
   };
 
   const inputClass =
-    "w-full rounded-xl border border-border bg-secondary/50 px-4 py-2.5 text-sm outline-none transition-colors focus:border-blue focus:ring-1 focus:ring-blue";
+    "w-full rounded border border-border bg-secondary/50 px-4 py-2.5 text-sm outline-none transition-all focus:border-cyan focus:ring-1 focus:ring-cyan focus:shadow-[0_0_10px_rgba(0,240,255,0.05)]";
   const labelClass = "block mb-1.5 text-xs font-medium text-muted-foreground";
+  const sectionTitle = "mb-4 text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-500">
+        <div className="rounded border border-magenta/30 bg-magenta/10 px-4 py-3 text-sm text-magenta">
           {error}
         </div>
       )}
 
-      <div className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="mb-4 font-semibold">المعلومات الأساسية</h2>
+      <div className="glass-card relative rounded border p-6">
+        <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
+        <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
+        <h2 className={sectionTitle}>// المعلومات الأساسية</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <label className={labelClass}>اسم المشروع *</label>
@@ -208,18 +211,20 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="mb-4 font-semibold">المنصات</h2>
+      <div className="glass-card relative rounded border p-6">
+        <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
+        <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
+        <h2 className={sectionTitle}>// المنصات</h2>
         <div className="flex flex-wrap gap-2">
           {platforms.map((p) => (
             <button
               key={p.value}
               type="button"
               onClick={() => togglePlatform(p.value)}
-              className={`rounded-lg px-3 py-1.5 text-xs transition-colors ${
+              className={`rounded border px-3 py-1.5 text-xs transition-all ${
                 platformsList.includes(p.value)
-                  ? "bg-blue text-white"
-                  : "bg-secondary text-muted-foreground hover:text-foreground"
+                  ? "border-cyan/50 bg-cyan/10 text-cyan shadow-[0_0_10px_rgba(0,240,255,0.1)]"
+                  : "border-border bg-secondary/50 text-muted-foreground hover:border-cyan/20 hover:text-foreground"
               }`}
             >
               {p.label}
@@ -228,8 +233,10 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="mb-4 font-semibold">التقنيات والروابط</h2>
+      <div className="glass-card relative rounded border p-6">
+        <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
+        <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
+        <h2 className={sectionTitle}>// التقنيات والروابط</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <label className={labelClass}>التقنيات (مفصولة بفاصلة)</label>
@@ -293,7 +300,7 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
                 <img
                   src={thumbnail}
                   alt="معاينة اللوجو"
-                  className="h-14 w-14 rounded-xl border border-border object-cover"
+                  className="h-14 w-14 rounded border border-border object-cover"
                   onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                 />
                 <span className="text-xs text-muted-foreground">معاينة اللوجو</span>
@@ -303,8 +310,10 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="mb-4 font-semibold">الميزات</h2>
+      <div className="glass-card relative rounded border p-6">
+        <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
+        <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
+        <h2 className={sectionTitle}>// الميزات</h2>
         <div className="space-y-4">
           <div>
             <label className={labelClass}>الميزات (سطر واحد لكل ميزة)</label>
@@ -313,7 +322,7 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
               onChange={(e) => setFeaturesText(e.target.value)}
               className={inputClass}
               rows={4}
-              placeholder={"ميزة 1&#10;ميزة 2&#10;ميزة 3"}
+              placeholder={"ميزة 1\nميزة 2\nميزة 3"}
             />
           </div>
           <label className="flex items-center gap-2">
@@ -321,7 +330,7 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
               type="checkbox"
               checked={featured}
               onChange={(e) => setFeatured(e.target.checked)}
-              className="h-4 w-4 rounded border-border"
+              className="h-4 w-4 rounded border-border accent-cyan"
             />
             <span className="text-sm">مشروع مميز</span>
           </label>
@@ -332,14 +341,14 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="rounded-xl bg-blue px-6 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue/25 transition-all hover:bg-blue-light disabled:opacity-50"
+          className="rounded border border-cyan/40 bg-cyan/10 px-6 py-2.5 text-sm font-medium text-cyan transition-all hover:bg-cyan/20 hover:border-cyan/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.2)] disabled:opacity-50"
         >
           {loading ? "جاري الحفظ..." : mode === "edit" ? "حفظ التعديلات" : "إنشاء المشروع"}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-xl border border-border bg-secondary/50 px-6 py-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="rounded border border-border bg-secondary/50 px-6 py-2.5 text-sm text-muted-foreground transition-all hover:border-cyan/20 hover:text-cyan"
         >
           إلغاء
         </button>

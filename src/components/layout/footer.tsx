@@ -5,19 +5,20 @@ import { SocialLinksList } from "@/components/social-links";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border">
+    <footer className="relative border-t border-cyan/10">
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue text-sm font-bold text-white">
+              <div className="relative flex h-8 w-8 items-center justify-center rounded border border-cyan/30 bg-cyan/10 text-sm font-bold text-cyan">
                 D
+                <div className="absolute -top-px -left-px h-2 w-2 border-t border-l border-cyan/60" />
+                <div className="absolute -bottom-px -right-px h-2 w-2 border-b border-r border-cyan/60" />
               </div>
-              <span className="text-lg font-semibold tracking-tight">
+              <span className="text-lg font-bold tracking-widest">
                 DAHAK{" "}
-                <span className="text-muted-foreground font-normal">
-                  Studio
-                </span>
+                <span className="text-cyan font-normal">Studio</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
@@ -26,15 +27,15 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              التنقل :
+            <h3 className="mb-4 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+              التنقل //
             </h3>
             <ul className="space-y-2.5">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="text-sm text-muted-foreground transition-colors hover:text-cyan hover:text-shadow-cyan"
                   >
                     {link.label}
                   </Link>
@@ -44,8 +45,8 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              وسائل التواصل :
+            <h3 className="mb-4 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+              وسائل التواصل //
             </h3>
             <SocialLinksList className="flex gap-5" />
           </div>
@@ -53,11 +54,13 @@ export function Footer() {
 
         <div className="mt-10 border-t border-border pt-6">
           <p className="text-center text-xs text-muted-foreground">
+            <span className="text-cyan/50">&lt;</span>
             &copy; {new Date().getFullYear()}{" "}
-            <Link href="/legal" className="border-b border-dashed border-muted-foreground/50 hover:border-foreground hover:text-foreground transition-colors">
+            <Link href="/legal" className="text-cyan/80 hover:text-cyan transition-colors">
               {siteConfig.name}
             </Link>
-            . جميع الحقوق محفوظة.
+            <span className="text-cyan/50"> /&gt;</span>{" "}
+            جميع الحقوق محفوظة.
           </p>
         </div>
       </div>
