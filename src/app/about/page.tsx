@@ -32,15 +32,22 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-10 glass-card rounded divide-y divide-border"
+          className="mt-10 glass-card rounded border overflow-hidden"
         >
-          {fields.map((field) => (
+          <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/15" />
+          <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/15" />
+          <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/15" />
+          <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/15" />
+
+          {fields.map((field, i) => (
             <div
               key={field.label}
-              className="flex items-center justify-between px-6 py-4"
+              className={`flex items-center justify-between px-6 py-4 ${
+                i < fields.length - 1 ? "border-b border-border/30" : ""
+              }`}
             >
-              <span className="text-sm text-muted-foreground">{field.label}</span>
-              <span className="font-medium text-foreground">{field.value}</span>
+              <span className="text-sm text-muted-foreground/60">{field.label}</span>
+              <span className="font-medium text-foreground/90">{field.value}</span>
             </div>
           ))}
         </motion.div>

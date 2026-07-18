@@ -36,21 +36,21 @@ export function Timeline() {
         </motion.div>
 
         <div className="relative">
-          <div className="absolute right-[19px] top-0 bottom-0 w-px bg-gradient-to-b from-cyan/20 via-cyan/10 to-transparent md:right-1/2" />
+          <div className="absolute right-[19px] top-0 bottom-0 w-px bg-gradient-to-b from-cyan/15 via-cyan/8 to-transparent md:right-1/2" />
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {allTimeline.map((entry, i) => (
               <motion.div
                 key={`${entry.date}-${entry.title}`}
                 initial={{ opacity: 0, x: i % 2 === 0 ? 20 : -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
                 className={`relative flex items-start gap-6 md:gap-0 ${
                   i % 2 === 0 ? "md:flex-row" : ""
                 }`}
               >
-                <div className="relative z-10 mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded border border-cyan/30 bg-background text-xs font-bold text-cyan font-mono md:absolute md:right-1/2 md:mr-[-20px]">
+                <div className="relative z-10 mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded border border-cyan/20 bg-background text-xs font-bold text-cyan/60 font-mono md:absolute md:right-1/2 md:mr-[-20px]">
                   {new Date(entry.date).getFullYear().toString().slice(2)}
                 </div>
                 <div
@@ -58,15 +58,15 @@ export function Timeline() {
                     i % 2 === 0 ? "md:ml-auto" : "md:mr-auto"
                   }`}
                 >
-                  <time className="font-mono text-xs text-cyan/60">
+                  <time className="font-mono text-xs text-cyan/40">
                     {new Date(entry.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
                     })}
                   </time>
-                  <h3 className="mt-1 font-semibold">{entry.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  <h3 className="mt-1 font-semibold text-foreground/90">{entry.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground/70">
                     {entry.description}
                   </p>
                 </div>

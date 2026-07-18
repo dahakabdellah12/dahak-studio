@@ -42,7 +42,7 @@ export function FeaturedProjects() {
           </div>
           <Link
             href="/projects"
-            className="hidden items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-cyan sm:flex"
+            className="hidden items-center gap-1.5 text-sm text-muted-foreground/60 transition-colors hover:text-cyan sm:flex"
           >
             عرض الكل
             <ArrowRight className="h-4 w-4" />

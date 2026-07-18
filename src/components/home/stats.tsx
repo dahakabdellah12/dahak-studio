@@ -29,7 +29,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   }, [isInView, target]);
 
   return (
-    <div ref={ref} className="text-3xl font-bold text-cyan text-shadow-cyan sm:text-4xl font-mono">
+    <div ref={ref} className="text-4xl font-bold text-cyan text-shadow-cyan sm:text-5xl font-mono tracking-tight">
       {target === 0 ? "—" : count.toLocaleString("en-US") + suffix}
     </div>
   );
@@ -58,7 +58,7 @@ const statItems = [
     icon: Calendar,
     label: "سنوات الخبرة",
     key: "yearsOfExperience" as const,
-    suffix: "",
+    suffix: "+",
   },
 ];
 
@@ -84,6 +84,21 @@ export function Stats() {
   return (
     <section className="relative py-24">
       <div className="mx-auto max-w-6xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-12"
+        >
+          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+            // الإحصائيات
+          </p>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            أرقام تتحدث
+          </h2>
+        </motion.div>
+
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {statItems.map((item, i) => (
             <motion.div
@@ -92,18 +107,18 @@ export function Stats() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass-card group relative rounded border p-6 text-center"
+              className="glass-card relative rounded border p-6 text-center"
             >
-              <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
-              <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
-              <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/30" />
-              <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/30" />
+              <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/20" />
+              <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/20" />
+              <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/20" />
+              <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/20" />
 
-              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded border border-cyan/20 bg-cyan/5 text-cyan">
-                <item.icon className="h-5 w-5" />
+              <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded border border-cyan/15 bg-cyan/5">
+                <item.icon className="h-5 w-5 text-cyan/70" />
               </div>
               <AnimatedCounter target={stats[item.key]} suffix={item.suffix} />
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-2 text-sm text-muted-foreground">
                 {item.label}
               </p>
             </motion.div>

@@ -26,7 +26,7 @@ export function Skills() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {categories.map((category, i) => (
             <motion.div
               key={category}
@@ -36,12 +36,12 @@ export function Skills() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="glass-card relative rounded border p-6"
             >
-              <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/40" />
-              <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/40" />
-              <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/40" />
-              <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/40" />
+              <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/15" />
+              <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/15" />
+              <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/15" />
+              <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/15" />
 
-              <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase">
+              <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/50 uppercase">
                 {category}
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -50,7 +50,7 @@ export function Skills() {
                   .map((skill) => (
                     <span
                       key={skill.name}
-                      className="rounded border border-border bg-secondary/50 px-3 py-1.5 text-sm text-muted-foreground transition-all hover:border-cyan/20 hover:text-cyan hover:shadow-[0_0_10px_rgba(0,240,255,0.05)]"
+                      className="rounded border border-border/50 bg-secondary/30 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-cyan/15 hover:text-foreground/80"
                     >
                       {skill.name}
                     </span>

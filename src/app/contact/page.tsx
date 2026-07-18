@@ -27,20 +27,30 @@ export default function ContactPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-10 space-y-6"
         >
-          <div className="glass-card rounded p-6 space-y-4">
+          <div className="glass-card relative rounded border p-6">
+            <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/15" />
+            <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/15" />
+            <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/15" />
+            <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/15" />
+
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded border border-cyan/20 bg-cyan/5">
-                <MapPin className="h-4 w-4 text-cyan" />
+              <div className="flex h-9 w-9 items-center justify-center rounded border border-cyan/10 bg-cyan/5">
+                <MapPin className="h-4 w-4 text-cyan/60" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">الموقع</p>
-                <p className="text-sm font-medium text-foreground">الجزائر</p>
+                <p className="text-xs text-muted-foreground/50">الموقع</p>
+                <p className="text-sm font-medium text-foreground/90">الجزائر</p>
               </div>
             </div>
           </div>
 
-          <div className="glass-card rounded p-6">
-            <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase">
+          <div className="glass-card relative rounded border p-6">
+            <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/15" />
+            <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/15" />
+            <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/15" />
+            <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/15" />
+
+            <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/50 uppercase">
               // شبكاتي
             </h3>
             <SocialLinksList className="flex gap-3" />
