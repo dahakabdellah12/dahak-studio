@@ -49,7 +49,7 @@ export function FeaturedProjects() {
           </Link>
         </motion.div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 items-stretch sm:grid-cols-2 lg:grid-cols-3">
           {featured.slice(0, 6).map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}

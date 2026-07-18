@@ -59,7 +59,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     >
       <Link
         href={`/projects/${project.slug}`}
-        className="glass-card group relative flex flex-col overflow-hidden rounded border transition-all hover:shadow-[0_0_30px_rgba(0,240,255,0.08)]"
+        className="glass-card group relative flex h-full flex-col overflow-hidden rounded border transition-all hover:shadow-[0_0_30px_rgba(0,240,255,0.08)]"
       >
         <div className="absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
         <div className="absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
