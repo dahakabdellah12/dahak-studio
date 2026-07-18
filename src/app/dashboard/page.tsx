@@ -1,6 +1,6 @@
 ﻿import Link from "next/link";
 import { getProjects } from "@/lib/data/projects-store";
-import { FolderGit2, Plus, ExternalLink, Share2 } from "lucide-react";
+import { FolderGit2, Plus, ExternalLink, Share2, Download } from "lucide-react";
 
 export default async function DashboardPage() {
   const projects = await getProjects();
@@ -50,6 +50,13 @@ export default async function DashboardPage() {
           >
             <Share2 className="h-4 w-4" />
             وسائل التواصل
+          </Link>
+          <Link
+            href="/dashboard/sync"
+            className="inline-flex items-center gap-2 rounded border border-border bg-secondary/50 px-4 py-2 text-sm text-muted-foreground transition-all hover:border-cyan/20 hover:text-cyan"
+          >
+            <Download className="h-4 w-4" />
+            مزامنة GitHub
           </Link>
         </div>
       </div>
