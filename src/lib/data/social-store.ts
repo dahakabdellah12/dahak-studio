@@ -28,8 +28,12 @@ async function fetchFile(filePath: string): Promise<{ sha: string; content: stri
   });
   if (!res.ok) return null;
   const data = await res.json();
-  const decoded = atob(data.content.replace(/\n/g, ""));
-  return { sha: data.sha, content: decodeURIComponent(escape(decoded)) };
+  const binaryStr = atob(data.content.replace(/\n/g, ""));
+  const bytes = new Uint8Array(binaryStr.length);
+  for (let i = 0; i < binaryStr.length; i++) {
+    bytes[i] = binaryStr.charCodeAt(i);
+  }
+  return { sha: data.sha, content: new TextDecoder("utf-8").decode(bytes) };
 }
 
 async function updateFile(filePath: string, content: string, sha: string | null, message: string): Promise<boolean> {

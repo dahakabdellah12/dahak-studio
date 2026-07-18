@@ -17,7 +17,12 @@ async function fetchReadme(owner: string, repo: string, token: string): Promise<
     if (!res.ok) return null;
     const data = await res.json();
     if (data.encoding === "base64" && data.content) {
-      return atob(data.content.replace(/\n/g, ""));
+      const binaryStr = atob(data.content.replace(/\n/g, ""));
+      const bytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) {
+        bytes[i] = binaryStr.charCodeAt(i);
+      }
+      return new TextDecoder("utf-8").decode(bytes);
     }
     return null;
   } catch {
