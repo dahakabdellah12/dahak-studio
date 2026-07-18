@@ -27,7 +27,7 @@ export default function ContactPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-10 space-y-6"
         >
-          <div className="glass-card relative rounded border p-6 space-y-4">
+          <div className="glass-card relative cursor-pointer rounded border p-6 space-y-4 transition-all hover:border-cyan/30 hover:shadow-[0_0_15px_rgba(0,240,255,0.05)]">
             <div className="absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
             <div className="absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
             <div className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-cyan/30" />
