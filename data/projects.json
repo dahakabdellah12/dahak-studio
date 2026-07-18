@@ -32,5 +32,39 @@
     "changelog": [],
     "timeline": [],
     "githubRepoId": 1283935466
+  },
+  {
+    "id": "88b757bb-7127-467e-b5ba-99ca08774ca9",
+    "slug": "wifi-keys",
+    "name": "Wifi-Keys",
+    "shortDescription": ".NET MAUI Android app for WiFi password recovery using fh_/wlan character substitution algorithm. Arabic/English/French. Dark/Light theme.",
+    "fullDescription": "",
+    "thumbnail": "",
+    "screenshots": [],
+    "category": "open-source",
+    "technologies": [
+      "C#"
+    ],
+    "status": "released",
+    "platforms": [
+      "windows",
+      "linux",
+      "android",
+      "web"
+    ],
+    "version": "",
+    "lastUpdated": "2026-07-15",
+    "githubUrl": "https://github.com/dahakabdellah12/Wifi-Keys",
+    "websiteUrl": "",
+    "downloadUrl": "",
+    "docsUrl": "",
+    "license": "MIT",
+    "stars": 0,
+    "downloads": 0,
+    "featured": false,
+    "features": [],
+    "changelog": [],
+    "timeline": [],
+    "githubRepoId": 1301887867
   }
 ]
