@@ -58,7 +58,7 @@ export default async function DashboardPage() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="glass-card relative cursor-pointer rounded border p-5 transition-all hover:border-cyan/30 hover:shadow-[0_0_15px_rgba(0,240,255,0.05)]"
+            className="glass-card relative rounded border p-5"
           >
             <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
             <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
@@ -100,7 +100,7 @@ export default async function DashboardPage() {
             {projects.slice(0, 5).map((project) => (
               <div
                 key={project.id}
-                className="flex items-center justify-between px-6 py-3 transition-colors hover:bg-secondary/30"
+                className="flex items-center justify-between px-6 py-3"
               >
                 <div>
                   <p className="font-medium">{project.name}</p>
