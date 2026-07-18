@@ -27,32 +27,82 @@ function parseFeaturesFromReadme(readme: string): string[] {
   const features: string[] = [];
   const lines = readme.split("\n");
   let inFeaturesSection = false;
+  let featuresIndentLevel = 0;
 
-  for (const line of lines) {
+  const featureHeaders = [
+    "feature", "highlight", "capability", "benefit", "advantage",
+    "key point", "what it does", "overview", "specification",
+    "مميز", "ميزة", "مزايا", "مميزات",
+  ];
+
+  function isFeatureHeader(text: string): boolean {
+    const lower = text.toLowerCase();
+    return featureHeaders.some((h) => lower.includes(h));
+  }
+
+  function extractBulletItem(line: string): string | null {
     const trimmed = line.trim();
+    // Match: - item, * item, - [x] item, - [ ] item, * [x] item
+    let match = trimmed.match(/^[-*]\s*(?:\[[ x]\]\s*)?(.+)/);
+    if (match) {
+      const text = match[1].replace(/`/g, "").trim();
+      if (text.length > 2 && text.length < 300) return text;
+    }
+    // Match: 1. item, 2) item
+    match = trimmed.match(/^\d+[.)]\s+(.+)/);
+    if (match) {
+      const text = match[1].replace(/`/g, "").trim();
+      if (text.length > 2 && text.length < 300) return text;
+    }
+    // Match: | col1 | col2 | — skip table rows
+    if (trimmed.startsWith("|") && trimmed.endsWith("|")) return null;
+    return null;
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
     const lower = trimmed.toLowerCase();
 
-    if (
-      lower.startsWith("## ") &&
-      (lower.includes("feature") ||
-        lower.includes("مميز") ||
-        lower.includes("highlight") ||
-        lower.includes("what") ||
-        lower.includes("capability"))
-    ) {
-      inFeaturesSection = true;
-      continue;
+    // Detect feature section headers (##, ###, or even ##)
+    const headerMatch = trimmed.match(/^(#{1,4})\s+(.+)/);
+    if (headerMatch) {
+      const headerLevel = headerMatch[1].length;
+      const headerText = headerMatch[2];
+
+      if (inFeaturesSection && headerLevel <= featuresIndentLevel) {
+        inFeaturesSection = false;
+      }
+
+      if (isFeatureHeader(headerText)) {
+        inFeaturesSection = true;
+        featuresIndentLevel = headerLevel;
+        continue;
+      }
     }
 
-    if (inFeaturesSection && trimmed.startsWith("## ")) {
-      inFeaturesSection = false;
-      continue;
+    if (inFeaturesSection) {
+      const item = extractBulletItem(trimmed);
+      if (item) {
+        features.push(item);
+      }
     }
+  }
 
-    if (inFeaturesSection && trimmed.startsWith("- ")) {
-      const feature = trimmed.replace(/^-\s*\[[ x]\]\s*/, "").replace(/^-\s*/, "").trim();
-      if (feature.length > 0 && feature.length < 200) {
-        features.push(feature);
+  // Fallback: if no features found from sections, scan for any bullet lists after the first heading
+  if (features.length === 0) {
+    let pastFirstHeading = false;
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed.startsWith("#")) {
+        pastFirstHeading = true;
+        continue;
+      }
+      if (pastFirstHeading) {
+        const item = extractBulletItem(trimmed);
+        if (item) {
+          features.push(item);
+          if (features.length >= 10) break;
+        }
       }
     }
   }
@@ -64,14 +114,127 @@ function detectPlatforms(readme: string, topics: string[]): string[] {
   const text = (readme + " " + topics.join(" ")).toLowerCase();
   const platforms: string[] = [];
 
-  if (text.includes("windows") || text.includes("wpf") || text.includes("winforms") || text.includes("win32") || text.includes(".net")) platforms.push("windows");
-  if (text.includes("android") || text.includes("maui") || text.includes("xamarin")) platforms.push("android");
-  if (text.includes("linux") || text.includes("gnome") || text.includes("kde")) platforms.push("linux");
-  if (text.includes("web") || text.includes("react") || text.includes("next.js") || text.includes("nextjs") || text.includes("html") || text.includes("css")) platforms.push("web");
-  if (text.includes("ios") || text.includes("swift") || text.includes("xcode")) platforms.push("ios");
+  // Windows
+  if (
+    text.includes("windows") || text.includes("wpf") || text.includes("winforms") ||
+    text.includes("win32") || text.includes(".net framework") || text.includes(".net core") ||
+    text.includes("blazor") || text.includes("avalonia") || text.includes(".exe") ||
+    text.includes("uwp") || text.includes("winui") || text.includes("windowsForms")
+  ) platforms.push("windows");
+
+  // Android
+  if (
+    text.includes("android") || text.includes("maui") || text.includes("xamarin") ||
+    text.includes("kotlin") || text.includes("java") || text.includes("gradle") ||
+    text.includes(".apk") || text.includes("google play") || text.includes("play store") ||
+    text.includes("jetpack compose")
+  ) platforms.push("android");
+
+  // Linux
+  if (
+    text.includes("linux") || text.includes("gnome") || text.includes("kde") ||
+    text.includes("apt") || text.includes("pacman") || text.includes("flatpak") ||
+    text.includes("snap") || text.includes("ubuntu") || text.includes("debian") ||
+    text.includes("arch linux") || text.includes("fedora") || text.includes(".deb") ||
+    text.includes(".rpm") || text.includes("gtk") || text.includes("qt")
+  ) platforms.push("linux");
+
+  // Web
+  if (
+    text.includes("web") || text.includes("react") || text.includes("next.js") ||
+    text.includes("nextjs") || text.includes("html") || text.includes("css") ||
+    text.includes("vue") || text.includes("angular") || text.includes("svelte") ||
+    text.includes("webpack") || text.includes("vite") || text.includes("npm") ||
+    text.includes("yarn") || text.includes("pwa") || text.includes("capacitor") ||
+    text.includes("ionic") || text.includes("node.js") || text.includes("nodejs") ||
+    text.includes("express") || text.includes("fastapi") || text.includes("django") ||
+    text.includes("flask") || text.includes("php") || text.includes("laravel") ||
+    text.includes("rails") || text.includes("ruby") || text.includes("deno") ||
+    text.includes("bun")
+  ) platforms.push("web");
+
+  // iOS
+  if (
+    text.includes("ios") || text.includes("swift") || text.includes("xcode") ||
+    text.includes("cocoa") || text.includes("uikit") || text.includes("swiftui") ||
+    text.includes("ipad") || text.includes("iphone") || text.includes("app store") ||
+    text.includes("cocoapods") || text.includes("carthage") || text.includes(".ipa")
+  ) platforms.push("ios");
+
+  // Desktop (cross-platform) indicators
+  if (
+    text.includes("electron") || text.includes("tauri") || text.includes("flutter") ||
+    text.includes("react native") || text.includes("dart") || text.includes("pyqt") ||
+    text.includes("pyside") || text.includes("tkinter") || text.includes("java") && text.includes("desktop") ||
+    text.includes("cross-platform") || text.includes("desktop app")
+  ) {
+    if (!platforms.includes("windows")) platforms.push("windows");
+    if (!platforms.includes("linux")) platforms.push("linux");
+  }
 
   if (platforms.length === 0) platforms.push("multi");
   return [...new Set(platforms)] as ("windows" | "android" | "linux" | "web" | "ios" | "multi")[];
+}
+
+function extractDescriptionFromReadme(readme: string): string {
+  const lines = readme.split("\n");
+  let startIdx = 0;
+
+  // Skip first heading (title)
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (trimmed.startsWith("# ")) {
+      startIdx = i + 1;
+      break;
+    }
+  }
+
+  const descriptionLines: string[] = [];
+  let blankCount = 0;
+
+  for (let i = startIdx; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+
+    // Stop at next heading
+    if (trimmed.startsWith("#")) break;
+
+    // Skip badge images, HTML tags, links, empty lines with just badges
+    if (
+      trimmed.startsWith("![") ||
+      trimmed.startsWith("<img") ||
+      trimmed.startsWith("[!") ||
+      trimmed.match(/^\[.*\]\(.*\)$/) ||
+      trimmed.match(/^---+$/) ||
+      trimmed.match(/^===+$/)
+    ) {
+      blankCount = 0;
+      continue;
+    }
+
+    if (trimmed === "") {
+      blankCount++;
+      if (blankCount >= 2) break;
+      continue;
+    }
+
+    blankCount = 0;
+    // Clean markdown formatting
+    const clean = trimmed
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // [text](url) -> text
+      .replace(/`([^`]+)`/g, "$1") // `code` -> code
+      .replace(/\*\*([^*]+)\*\*/g, "$1") // **bold** -> bold
+      .replace(/__([^_]+)__/g, "$1")
+      .replace(/[*_~]/g, "")
+      .trim();
+
+    if (clean.length > 0) {
+      descriptionLines.push(clean);
+    }
+
+    if (descriptionLines.length >= 3) break;
+  }
+
+  return descriptionLines.join(" ").trim();
 }
 
 function buildImportData(repo: Repo) {
@@ -79,9 +242,12 @@ function buildImportData(repo: Repo) {
   const platforms = detectPlatforms(repo.readme || "", repo.topics);
   const techs = [repo.language, ...repo.topics].filter(Boolean) as string[];
 
+  // Fallback: use first meaningful paragraph from README if no GitHub description
+  const shortDesc = repo.description || extractDescriptionFromReadme(repo.readme || "");
+
   return {
     name: repo.name,
-    shortDescription: repo.description || "",
+    shortDescription: shortDesc,
     fullDescription: repo.readme || "",
     githubUrl: repo.html_url,
     technologies: techs,

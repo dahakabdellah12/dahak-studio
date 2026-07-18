@@ -25,7 +25,7 @@ async function fetchReadme(owner: string, repo: string, token: string): Promise<
   }
 }
 
-async function fetchLatestRelease(owner: string, repo: string, token: string): Promise<{ tag: string; date: string } | null> {
+async function fetchLatestRelease(owner: string, repo: string, token: string): Promise<{ tag: string; date: string | null } | null> {
   try {
     const res = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
@@ -37,9 +37,28 @@ async function fetchLatestRelease(owner: string, repo: string, token: string): P
         cache: "no-store",
       }
     );
-    if (!res.ok) return null;
-    const data = await res.json();
-    return { tag: data.tag_name, date: data.published_at?.split("T")[0] || null };
+    if (res.ok) {
+      const data = await res.json();
+      return { tag: data.tag_name, date: data.published_at?.split("T")[0] || null };
+    }
+    // Fallback: fetch latest tag if no release exists
+    const tagsRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/tags?per_page=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    if (tagsRes.ok) {
+      const tags = await tagsRes.json();
+      if (Array.isArray(tags) && tags.length > 0 && typeof tags[0].name === "string") {
+        return { tag: tags[0].name, date: null };
+      }
+    }
+    return null;
   } catch {
     return null;
   }
