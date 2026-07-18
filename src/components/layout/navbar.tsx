@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronLeft } from "lucide-react";
 import { navLinks } from "@/lib/data/navigation";
 import { cn } from "@/lib/utils";
 
@@ -90,87 +90,106 @@ export function Navbar() {
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 top-16 z-40 bg-background/98 backdrop-blur-xl md:hidden"
-          >
-            {/* Scanlines overlay */}
-            <div className="pointer-events-none absolute inset-0 opacity-[0.03]">
-              <div className="h-full w-full" style={{
-                backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,240,255,0.1) 2px, rgba(0,240,255,0.1) 4px)"
-              }} />
-            </div>
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={closeMenu}
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+            />
 
-            {/* Corner decorations */}
-            <div className="absolute top-4 left-4 h-16 w-16 border-t border-l border-cyan/15" />
-            <div className="absolute top-4 right-4 h-16 w-16 border-t border-r border-cyan/15" />
-            <div className="absolute bottom-4 left-4 h-16 w-16 border-b border-l border-cyan/15" />
-            <div className="absolute bottom-4 right-4 h-16 w-16 border-b border-r border-cyan/15" />
+            {/* Side Panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed top-0 right-0 bottom-0 z-50 w-72 border-l border-cyan/20 bg-background/98 backdrop-blur-xl md:hidden"
+            >
+              {/* Top accent line */}
+              <div className="h-px bg-gradient-to-r from-cyan/50 via-cyan to-cyan/50" />
 
-            {/* System status line */}
-            <div className="relative mx-6 mt-6 flex items-center gap-2 text-[10px] font-mono tracking-widest text-cyan/40 uppercase">
-              <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-cyan/60" />
-              system.nav.menu.active
-              <span className="flex-1 h-px bg-gradient-to-r from-cyan/20 to-transparent" />
-            </div>
-
-            {/* Navigation links */}
-            <div className="relative mx-6 mt-6 space-y-1">
-              {navLinks.map((link, i) => {
-                const isActive = pathname === link.href;
-                return (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 * i, duration: 0.3 }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={closeMenu}
-                      className={cn(
-                        "group flex items-center gap-4 rounded-sm border px-5 py-4 transition-all duration-200",
-                        isActive
-                          ? "border-cyan/30 bg-cyan/5 text-cyan shadow-[0_0_15px_rgba(0,240,255,0.05)]"
-                          : "border-transparent text-muted-foreground hover:border-border hover:bg-secondary/30 hover:text-foreground"
-                      )}
-                    >
-                      <span className={cn(
-                        "font-mono text-[10px] tracking-wider",
-                        isActive ? "text-cyan/60" : "text-muted-foreground/40"
-                      )}>
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="text-sm font-medium tracking-wider uppercase">
-                        {link.label}
-                      </span>
-                      {isActive && (
-                        <span className="mr-auto inline-block h-1.5 w-1.5 rounded-full bg-cyan shadow-[0_0_8px_rgba(0,240,255,0.6)]" />
-                      )}
-                      <span className={cn(
-                        "mr-auto text-[10px] font-mono transition-colors",
-                        isActive ? "text-cyan/40" : "text-muted-foreground/0 group-hover:text-muted-foreground/30"
-                      )}>
-                        &gt;_
-                      </span>
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* Bottom decoration */}
-            <div className="absolute bottom-6 left-0 right-0 px-6">
-              <div className="h-px bg-gradient-to-r from-transparent via-cyan/15 to-transparent" />
-              <div className="mt-4 flex items-center justify-between text-[9px] font-mono tracking-widest text-muted-foreground/30 uppercase">
-                <span>dahak.studio</span>
-                <span>v2.0.77</span>
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-4">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 animate-pulse rounded-full bg-cyan shadow-[0_0_8px_rgba(0,240,255,0.6)]" />
+                  <span className="text-xs font-mono tracking-widest text-cyan/60 uppercase">NAV</span>
+                </div>
+                <button
+                  onClick={closeMenu}
+                  className="flex h-8 w-8 items-center justify-center rounded border border-border text-muted-foreground transition-all hover:border-magenta/30 hover:text-magenta"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-            </div>
-          </motion.div>
+
+              {/* Divider */}
+              <div className="mx-5 h-px bg-border" />
+
+              {/* Navigation */}
+              <div className="mt-4 space-y-1 px-3">
+                {navLinks.map((link, i) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.08 * i, duration: 0.3 }}
+                    >
+                      <Link
+                        href={link.href}
+                        onClick={closeMenu}
+                        className={cn(
+                          "group flex items-center gap-3 rounded border px-4 py-3 transition-all duration-200",
+                          isActive
+                            ? "border-cyan/30 bg-cyan/5 text-cyan"
+                            : "border-transparent text-muted-foreground hover:border-border hover:bg-secondary/30 hover:text-foreground"
+                        )}
+                      >
+                        <span className={cn(
+                          "flex h-6 w-6 shrink-0 items-center justify-center rounded text-[10px] font-mono",
+                          isActive
+                            ? "bg-cyan/20 text-cyan"
+                            : "bg-secondary text-muted-foreground group-hover:bg-secondary/80"
+                        )}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-sm font-medium tracking-wider uppercase">
+                          {link.label}
+                        </span>
+                        <ChevronLeft className={cn(
+                          "mr-auto h-3.5 w-3.5 transition-all",
+                          isActive
+                            ? "text-cyan opacity-100"
+                            : "text-muted-foreground opacity-0 group-hover:opacity-50"
+                        )} />
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {/* Bottom section */}
+              <div className="absolute bottom-0 left-0 right-0 border-t border-border bg-background/50 p-5">
+                <div className="flex items-center gap-2 text-[10px] font-mono tracking-wider text-muted-foreground/40 uppercase">
+                  <span className="h-1 w-1 rounded-full bg-emerald-500" />
+                  <span>system.online</span>
+                </div>
+                <div className="mt-2 flex items-center justify-between text-[9px] font-mono text-muted-foreground/30">
+                  <span>DAHAK STUDIO</span>
+                  <span className="text-cyan/30">v2.0.77</span>
+                </div>
+              </div>
+
+              {/* Corner accents */}
+              <div className="absolute top-0 left-0 h-20 w-px bg-gradient-to-b from-cyan/30 to-transparent" />
+              <div className="absolute bottom-16 left-0 h-20 w-px bg-gradient-to-b from-transparent to-cyan/30" />
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </motion.header>
