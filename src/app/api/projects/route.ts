@@ -70,6 +70,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const existingProjects = await getProjects();
+    const githubRepoId = typeof body.githubRepoId === "number" ? body.githubRepoId : null;
+    if (githubRepoId && existingProjects.some((p) => p.githubRepoId === githubRepoId)) {
+      return NextResponse.json({ error: "Project already imported" }, { status: 409 });
+    }
+
     const project = {
       id: crypto.randomUUID(),
       slug: sanitizeString(body.slug, 100) || name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
@@ -95,6 +101,7 @@ export async function POST(request: NextRequest) {
       features: sanitizeArray(body.features, 30, 200),
       changelog: Array.isArray(body.changelog) ? body.changelog.slice(0, 50) : [],
       timeline: Array.isArray(body.timeline) ? body.timeline.slice(0, 50) : [],
+      ...(githubRepoId ? { githubRepoId } : {}),
     };
 
     const created = await addProject(project);

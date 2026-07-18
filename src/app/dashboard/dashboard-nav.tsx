@@ -9,6 +9,7 @@ const dashLinks = [
   { href: "/dashboard", label: "الرئيسية" },
   { href: "/dashboard/projects", label: "المشاريع" },
   { href: "/dashboard/social", label: "وسائل التواصل" },
+  { href: "/dashboard/sync", label: "المزامنة" },
 ];
 
 export function DashboardNav() {

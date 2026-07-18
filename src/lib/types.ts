@@ -41,6 +41,26 @@ export interface Project {
   changelog?: ChangelogEntry[];
   timeline?: TimelineEntry[];
   relatedProjects?: string[];
+  githubRepoId?: number;
+}
+
+export interface GitHubRepo {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string | null;
+  html_url: string;
+  language: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  topics: string[];
+  license: { spdx_id: string } | null;
+  pushed_at: string;
+  created_at: string;
+  archived: boolean;
+  fork: boolean;
+  size: number;
+  open_issues_count: number;
 }
 
 export interface ChangelogEntry {
