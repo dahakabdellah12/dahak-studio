@@ -32,7 +32,7 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-10 glass-card relative rounded border divide-y divide-border"
+          className="mt-10 glass-card relative rounded divide-y divide-border"
         >
           <div className="pointer-events-none absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
           <div className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />

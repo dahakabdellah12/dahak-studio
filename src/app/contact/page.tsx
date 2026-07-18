@@ -27,7 +27,7 @@ export default function ContactPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-10 space-y-6"
         >
-          <div className="glass-card relative rounded border p-6 space-y-4">
+          <div className="glass-card relative rounded p-6 space-y-4">
             <div className="pointer-events-none absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
             <div className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
 
@@ -57,7 +57,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="glass-card relative rounded border p-6">
+          <div className="glass-card relative rounded p-6">
             <div className="pointer-events-none absolute top-0 left-0 h-3 w-3 border-t border-l border-cyan/30" />
             <div className="pointer-events-none absolute top-0 right-0 h-3 w-3 border-t border-r border-cyan/30" />
             <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase">
