@@ -1,6 +1,7 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
 
 const SESSION_COOKIE = "dahak_session";
+const RATE_LIMIT_COOKIE = "dahak_rl";
 
 function getSessionSecret(): string {
   const secret = process.env.DASHBOARD_SESSION_SECRET;
@@ -47,24 +48,38 @@ async function verifySessionToken(token: string): Promise<boolean> {
   }
 }
 
-const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
 
-function getRateLimitKey(request: NextRequest): string {
-  return request.headers.get("x-real-ip") || "__no_ip__";
+interface RateLimitData {
+  count: number;
+  resetAt: number;
 }
 
-function checkRateLimit(key: string): boolean {
-  const now = Date.now();
-  const record = loginAttempts.get(key);
-  if (!record || now > record.resetAt) {
-    loginAttempts.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
-    return true;
+async function getRateLimitData(cookie: string | undefined): Promise<RateLimitData> {
+  if (!cookie) return { count: 0, resetAt: 0 };
+  try {
+    const parts = cookie.split(":");
+    if (parts.length !== 3) return { count: 0, resetAt: 0 };
+    const [countStr, resetAtStr, signature] = parts;
+    const payload = `${countStr}:${resetAtStr}`;
+    const secret = getSessionSecret();
+    const expectedSig = await hmacSign(payload, secret);
+    if (signature !== expectedSig) return { count: 0, resetAt: 0 };
+    const count = parseInt(countStr, 10);
+    const resetAt = parseInt(resetAtStr, 10);
+    if (isNaN(count) || isNaN(resetAt)) return { count: 0, resetAt: 0 };
+    return { count, resetAt };
+  } catch {
+    return { count: 0, resetAt: 0 };
   }
-  if (record.count >= RATE_LIMIT_MAX) return false;
-  record.count++;
-  return true;
+}
+
+async function createRateLimitCookie(data: RateLimitData): Promise<string> {
+  const secret = getSessionSecret();
+  const payload = `${data.count}:${data.resetAt}`;
+  const signature = await hmacSign(payload, secret);
+  return `${payload}:${signature}`;
 }
 
 function isValidHttpUrl(url: string): boolean {
@@ -106,10 +121,14 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/api/auth/login") && request.method === "POST") {
-    const key = getRateLimitKey(request);
-    if (!checkRateLimit(key)) {
+    const rlCookie = request.cookies.get(RATE_LIMIT_COOKIE)?.value;
+    const data = await getRateLimitData(rlCookie);
+    const now = Date.now();
+
+    if (data.resetAt > now && data.count >= RATE_LIMIT_MAX) {
+      const retryAfter = Math.ceil((data.resetAt - now) / 1000);
       return NextResponse.json(
-        { error: "Too many attempts. Try again later." },
+        { error: `Too many attempts. Try again in ${retryAfter} seconds.` },
         { status: 429 }
       );
     }
