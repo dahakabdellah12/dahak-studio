@@ -7,12 +7,13 @@ import { ArrowLeft } from "lucide-react";
 export function Hero() {
   return (
     <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan/8 via-background to-background" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-cyan/4 via-transparent to-transparent" />
       <div className="absolute inset-0 cyber-grid" />
 
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/5 blur-[120px]" />
-        <div className="absolute top-1/3 right-1/4 h-[300px] w-[300px] rounded-full bg-magenta/3 blur-[100px]" />
-        <div className="absolute bottom-1/4 left-1/4 h-[250px] w-[250px] rounded-full bg-cyan/3 blur-[80px]" />
+        <div className="absolute top-0 left-0 h-[600px] w-[600px] -translate-x-1/3 -translate-y-1/3 rounded-full bg-cyan/8 blur-[150px]" />
+        <div className="absolute bottom-0 right-0 h-[400px] w-[400px] translate-x-1/4 translate-y-1/4 rounded-full bg-cyan/3 blur-[120px]" />
       </div>
 
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan/30 to-transparent" />
