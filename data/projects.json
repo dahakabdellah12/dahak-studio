@@ -138,5 +138,37 @@
     "changelog": [],
     "timeline": [],
     "githubRepoId": 1305567326
+  },
+  {
+    "id": "ee0353db-ed2f-4f58-bf92-b3374d24bf3b",
+    "slug": "orcaos",
+    "name": "OrcaOS",
+    "shortDescription": "64-bit x86-64 educational kernel with Ring 3 user mode, ELF64 loader, OrcaFS, shell, and cross-platform build (MSYS2 + Linux)",
+    "fullDescription": "# OrcaOS\n\nAn educational **64-bit x86-64** kernel written in C with assembly glue. OrcaOS boots via QEMU PVH (or GRUB Multiboot2), manages memory, files, processes, and runs ELF64 **user-mode programs** at Ring 3 with full hardware isolation via `iretq`.\n\n---\n\n## Architecture\n\n```\n                          ┌──────────────────────┐\n                          │    User Process       │ Ring 3\n                          │  (ELF64, int 0x80)    │\n                          └──────────┬───────────┘\n                                     │ syscall\n                          ┌──────────▼───────────┐\n                          │  interrupt 0x80       │ Ring 0\n                          │  IDT → isr_stubs.S   │\n                          │  → syscall.c handler  │\n                          └──────────┬───────────┘\n                ┌────────────────────┼────────────────────┐\n                │                    │                    │\n         ┌──────▼──────┐    ┌───────▼───────┐    ┌───────▼───────┐\n         │  Scheduler   │    │  VFS + OrcaFS  │    │   Memory      │\n         │  round-robin │    │  block/ATA     │    │  PMM/Paging   │\n         └──────────────┘    └───────────────┘    └───────────────┘\n```\n\n| Layer | Description |\n|-------|-------------|\n| **Boot** | `boot.asm` — Multiboot2 header, enters 64-bit long mode, identity-maps first 1 GB with 2 MB pages |\n| **PMM** | Physical Memory Manager — bitmap-based, parses Multiboot2 memory map, Next-Fit allocation |\n| **Paging** | 4-level page tables (PML4→PDPT→PD→PT), `map_page`/`unmap_page`, 2 MB↔4 KB split, USER flag propagation |\n| **Heap** | Kernel heap at `0x100000000` — free-list allocator with splitting, forward coalescing, dynamic expansion (`kmalloc`/`kfree`) |\n| **GDT** | 7 entries: null, kernel code/data, user code/data (Ring 3), TSS with RSP0 |\n| **IDT** | 256 entries: 32 exception ISRs, 16 IRQs (PIC-remapped to 32–47), `int 0x80` syscall (DPL 3) |\n| **Syscall** | `SYS_WRITE` (print to VGA), `SYS_READ` (stub), `SYS_EXIT` (return to Ring 0) |\n| **Process** | Static table (64 processes), states: UNUSED/READY/RUNNING/BLOCKED/EXITED, user-mode `process_create_user()` |\n| **Scheduler** | Round-robin queue (64 entries), `scheduler_next()` skips EXITED/UNUSED |\n| **Shell** | Interactive CLI (`orca` prompt), 11 commands, AZERTY keyboard, path-aware |\n| **VFS** | In-memory directory tree backed by OrcaFS with persistence across reboots |\n| **OrcaFS** | Custom flat filesystem: superblock (sector 1), inode table (sectors 2–99), data blocks (sector 100+) |\n| **ATA** | PIO 28‑bit LBA driver — polled mode, single/multi-sector read/write |\n| **VGA** | Text mode 80×25, hardware cursor, COM1 serial mirror |\n\n---\n\n## Project Structure\n\n```\nOrcaOS/\n├── bootloader/\n│   └── boot.asm                    # Multiboot2 + 64-bit entry\n├── kernel/\n│   ├── kernel.c                    # Boot sequence, built-in ELF test\n│   ├── kernel.h\n│   ├── idt.c / idt.h               # Interrupt descriptor table\n│   ├── isr_stubs.S                 # ISR/IRQ/syscall stubs (cross-platform GAS)\n│   ├── syscall.c / syscall.h       # System call handler\n│   ├── pvh_note.s                  # Xen PVH note section\n│   ├── editor.c / editor.h         # Simple text editor\n│   ├── ports.h                     # I/O port helpers\n│   ├── types.h                     # Custom types\n│   ├── memory/\n│   │   ├── pmm.c / pmm.h           # Physical memory manager\n│   │   ├── paging.c / paging.h     # 4-level page tables\n│   │   ├── heap.c / heap.h         # Kernel heap\n│   │   └── mem_util.h              # num_to_string helper\n│   ├── cpu/\n│   │   ├── gdt.c / gdt.h           # GDT setup\n│   │   ├── gdt_reload.S            # lgdt (cross-platform)\n│   │   ├── tss.c / tss.h           # Task State Segment\n│   │   └── ltr_test.s              # LTR instruction helper\n│   ├── process/\n│   │   ├── process.c / process.h   # Process manager\n│   │   ├── scheduler.c / .h        # Round-robin scheduler\n│   │   └── context_switch.S        # switch_to_user (iretq)\n│   ├── elf/\n│   │   ├── elf.c / elf.h           # ELF64 loader\n│   ├── fs/\n│   │   ├── vfs.c / vfs.h           # Virtual file system\n│   │   ├── file.c / file.h         # File descriptor API\n│   │   ├── block.c / block.h       # Block device abstraction\n│   │   ├── path.c / path.h         # Path resolver\n│   │   └── orcafs/\n│   │       ├── orcafs.c / orcafs.h # OrcaFS mount/file ops\n│   │       └── inode.c / inode.h   # Inode table + directory entries\n│   └── shell/\n│       ├── shell.c / shell.h       # Interactive command shell\n├── drivers/\n│   ├── vga.c / vga.h               # VGA text-mode driver\n│   ├── keyboard.c / keyboard.h     # PS/2 AZERTY keyboard\n│   └── disk/\n│       └── ata.c / ata.h           # ATA PIO driver\n├── gen_elf.py                      # Minimal ELF64 binary generator\n├── user_test.asm                   # NASM user-mode test program\n├── user_test.lds                   # Linker script for user programs\n├── linker.ld                       # Kernel linker script",
+    "thumbnail": "",
+    "screenshots": [],
+    "category": "open-source",
+    "technologies": [
+      "C"
+    ],
+    "status": "released",
+    "platforms": [
+      "windows",
+      "linux"
+    ],
+    "version": "",
+    "lastUpdated": "2026-07-19",
+    "githubUrl": "https://github.com/dahakabdellah12/OrcaOS",
+    "websiteUrl": "",
+    "downloadUrl": "",
+    "docsUrl": "",
+    "license": "",
+    "stars": 0,
+    "downloads": 0,
+    "featured": false,
+    "features": [],
+    "changelog": [],
+    "timeline": [],
+    "githubRepoId": 1305570133
   }
 ]
