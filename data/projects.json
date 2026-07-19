@@ -45,7 +45,7 @@
     "slug": "wifi-keys",
     "name": "Wifi-Keys",
     "shortDescription": ".NET MAUI Android app for WiFi password recovery using fh_/wlan character substitution algorithm. Arabic/English/French. Dark/Light theme.",
-    "fullDescription": "تطبيق Android لاكتشاف شبكات WiFi القريبة واستخراج كلمات المرور باستخدام خوارزمية تحويل الأحرف المخصصة.\n\n **ملاحظة:** هذا التطبيق مخصص فقط للشبكات التي تبدأ بـ `fh_` أو `wlan` — وهي شبكات مشفرة بخوارزمية معروفة.",
+    "fullDescription": "تطبيق Android لاكتشاف شبكات WiFi القريبة واستخراج كلمات المرور باستخدام خوارزمية تحويل الأحرف المخصصة.\n\nملاحظة:\n هذا التطبيق مخصص فقط للشبكات التي تبدأ بـ `fh_` أو `wlan` — وهي شبكات مشفرة بخوارزمية معروفة.",
     "thumbnail": "",
     "screenshots": [],
     "category": "open-source",
