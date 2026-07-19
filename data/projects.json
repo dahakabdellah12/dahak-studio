@@ -9,7 +9,11 @@
     "screenshots": [],
     "category": "open-source",
     "technologies": [
-      "C#"
+      "C#",
+      "NET 8",
+      "ASP.NET Core Minimal API",
+      "EF Core + SQLite",
+      "Vanilla JS"
     ],
     "status": "in-development",
     "platforms": [
