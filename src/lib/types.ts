@@ -99,9 +99,9 @@ export interface SiteConfig {
 
 export interface SiteStats {
   totalProjects: number;
-  downloads: number;
+  githubRepos: number;
   githubStars: number;
-  yearsOfExperience: number;
+  githubCommits: number;
 }
 
 export interface Skill {

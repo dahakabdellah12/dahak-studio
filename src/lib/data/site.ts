@@ -16,8 +16,8 @@ export const siteConfig: SiteConfig = {
   ],
   stats: {
     totalProjects: 0,
-    downloads: 0,
+    githubRepos: 0,
     githubStars: 0,
-    yearsOfExperience: 0,
+    githubCommits: 0,
   },
 };

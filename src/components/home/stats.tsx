@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { FolderOpen, Download, Star, Calendar } from "lucide-react";
-import { siteConfig } from "@/lib/data/site";
+import { FolderOpen, GitBranch, Star, GitCommit } from "lucide-react";
 
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -43,9 +42,9 @@ const statItems = [
     suffix: "",
   },
   {
-    icon: Download,
-    label: "التنزيلات",
-    key: "downloads" as const,
+    icon: GitBranch,
+    label: "مستودعات GitHub",
+    key: "githubRepos" as const,
     suffix: "",
   },
   {
@@ -55,27 +54,34 @@ const statItems = [
     suffix: "",
   },
   {
-    icon: Calendar,
-    label: "سنوات الخبرة",
-    key: "yearsOfExperience" as const,
-    suffix: "+",
+    icon: GitCommit,
+    label: "مساهمات GitHub",
+    key: "githubCommits" as const,
+    suffix: "",
   },
 ];
 
 export function Stats() {
-  const [projectCount, setProjectCount] = useState(0);
+  const [stats, setStats] = useState({
+    totalProjects: 0,
+    githubRepos: 0,
+    githubStars: 0,
+    githubCommits: 0,
+  });
 
   useEffect(() => {
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data) => setProjectCount(data.length))
-      .catch(() => setProjectCount(0));
+    Promise.all([
+      fetch("/api/projects").then((r) => r.json()).catch(() => []),
+      fetch("/api/github/stats").then((r) => r.json()).catch(() => ({ githubRepos: 0, githubStars: 0, githubCommits: 0 })),
+    ]).then(([projects, gh]) => {
+      setStats({
+        totalProjects: Array.isArray(projects) ? projects.length : 0,
+        githubRepos: gh.githubRepos || 0,
+        githubStars: gh.githubStars || 0,
+        githubCommits: gh.githubCommits || 0,
+      });
+    });
   }, []);
-
-  const stats = {
-    ...siteConfig.stats,
-    totalProjects: projectCount,
-  };
 
   const hasData = Object.values(stats).some((v) => v > 0);
 
