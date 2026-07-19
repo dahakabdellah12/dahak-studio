@@ -112,6 +112,27 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
   return response;
 }
 
+const CACHE_CONTROL = "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400";
+const NO_CACHE = "no-store, no-cache, must-revalidate";
+
+function isPublicPage(pathname: string): boolean {
+  if (pathname.startsWith("/dashboard")) return false;
+  if (pathname.startsWith("/api/")) return false;
+  if (pathname === "/robots.txt" || pathname === "/sitemap.xml") return false;
+  return true;
+}
+
+function addCacheHeaders(response: NextResponse, pathname: string, method: string): NextResponse {
+  if (isPublicPage(pathname)) {
+    response.headers.set("Cache-Control", CACHE_CONTROL);
+  } else if (pathname.startsWith("/api/") && method === "GET" && !pathname.startsWith("/api/auth")) {
+    response.headers.set("Cache-Control", CACHE_CONTROL);
+  } else {
+    response.headers.set("Cache-Control", NO_CACHE);
+  }
+  return response;
+}
+
 function hasValidCsrfHeader(request: NextRequest): boolean {
   return request.headers.get("x-requested-with") === "xmlhttprequest" ||
     request.headers.get("x-csrf-token") !== null;
@@ -119,8 +140,9 @@ function hasValidCsrfHeader(request: NextRequest): boolean {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const method = request.method;
 
-  if (pathname.startsWith("/api/auth/login") && request.method === "POST") {
+  if (pathname.startsWith("/api/auth/login") && method === "POST") {
     const rlCookie = request.cookies.get(RATE_LIMIT_COOKIE)?.value;
     const data = await getRateLimitData(rlCookie);
     const now = Date.now();
@@ -141,7 +163,9 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
       const res = NextResponse.next();
-      return addSecurityHeaders(res);
+      addSecurityHeaders(res);
+      addCacheHeaders(res, pathname, method);
+      return res;
     }
 
     const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -151,26 +175,25 @@ export async function middleware(request: NextRequest) {
   }
 
   if (pathname.startsWith("/api/projects") || pathname.startsWith("/api/social") || pathname.startsWith("/api/github")) {
-    const method = request.method;
-    if (method === "GET") {
-      const res = NextResponse.next();
-      return addSecurityHeaders(res);
-    }
-
-    if (!hasValidCsrfHeader(request)) {
-      return NextResponse.json({ error: "Missing CSRF header" }, { status: 403 });
-    }
-
-    const token = request.cookies.get(SESSION_COOKIE)?.value;
-    if (!token || !(await verifySessionToken(token))) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (method !== "GET") {
+      if (!hasValidCsrfHeader(request)) {
+        return NextResponse.json({ error: "Missing CSRF header" }, { status: 403 });
+      }
+      const token = request.cookies.get(SESSION_COOKIE)?.value;
+      if (!token || !(await verifySessionToken(token))) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
     }
   }
 
   const res = NextResponse.next();
-  return addSecurityHeaders(res);
+  addSecurityHeaders(res);
+  addCacheHeaders(res, pathname, method);
+  return res;
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/projects/:path*", "/api/social/:path*", "/api/auth/:path*", "/api/github/:path*"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+  ],
 };
