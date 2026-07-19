@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 import { logout } from "./actions";
 import { cn } from "@/lib/utils";
 
@@ -14,9 +15,19 @@ const dashLinks = [
 
 export function DashboardNav() {
   const pathname = usePathname();
+  const isSubPage = pathname !== "/dashboard";
 
   return (
     <div className="flex items-center gap-6">
+      {isSubPage && (
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-cyan"
+        >
+          <ArrowRight className="h-3.5 w-3.5" />
+          الداش بورد
+        </Link>
+      )}
       <Link href="/dashboard" className="flex items-center gap-2.5">
         <div className="flex h-7 w-7 items-center justify-center rounded border border-cyan/40 bg-cyan/10 text-xs font-bold text-cyan">
           D
@@ -31,7 +42,7 @@ export function DashboardNav() {
             className={cn(
               "rounded border px-3 py-1.5 text-xs font-medium transition-all",
               pathname === link.href
-                ? "border-cyan/30 bg-cyan/10 text-cyan shadow-[0_0_10px_rgba(0,240,255,0.05)]"
+                ? "border-cyan/30 bg-cyan/10 text-cyan"
                 : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
             )}
           >

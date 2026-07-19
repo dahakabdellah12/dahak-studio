@@ -32,7 +32,7 @@ export function ProjectFilters({
             onClick={() => onCategoryChange(null)}
             className={`rounded border px-3 py-1.5 text-xs font-medium transition-all ${
               selectedCategory === null
-                ? "border-cyan/50 bg-cyan/10 text-cyan shadow-[0_0_10px_rgba(0,240,255,0.1)]"
+                ? "border-cyan/50 bg-cyan/10 text-cyan"
                 : "border-border bg-secondary/50 text-muted-foreground hover:border-cyan/20 hover:text-foreground"
             }`}
           >
@@ -44,7 +44,7 @@ export function ProjectFilters({
               onClick={() => onCategoryChange(cat)}
               className={`rounded border px-3 py-1.5 text-xs font-medium transition-all ${
                 selectedCategory === cat
-                  ? "border-cyan/50 bg-cyan/10 text-cyan shadow-[0_0_10px_rgba(0,240,255,0.1)]"
+                  ? "border-cyan/50 bg-cyan/10 text-cyan"
                   : "border-border bg-secondary/50 text-muted-foreground hover:border-cyan/20 hover:text-foreground"
               }`}
             >
@@ -62,7 +62,7 @@ export function ProjectFilters({
               onClick={() => onTechChange(selectedTech === tech ? null : tech)}
               className={`rounded border px-3 py-1.5 text-xs font-medium transition-all ${
                 selectedTech === tech
-                  ? "border-magenta/50 bg-magenta/10 text-magenta shadow-[0_0_10px_rgba(255,42,109,0.1)]"
+                  ? "border-magenta/50 bg-magenta/10 text-magenta"
                   : "border-border bg-secondary/50 text-muted-foreground hover:border-magenta/20 hover:text-foreground"
               }`}
             >

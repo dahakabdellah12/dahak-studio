@@ -39,7 +39,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded border border-cyan/30 bg-cyan/5 text-cyan shadow-[0_0_30px_rgba(0,240,255,0.15)]">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded border border-cyan/30 bg-cyan/5 text-cyan">
             <Lock className="h-7 w-7" />
           </div>
           <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan/70 uppercase">

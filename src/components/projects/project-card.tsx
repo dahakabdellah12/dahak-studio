@@ -59,7 +59,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     >
       <Link
         href={`/projects/${project.slug}`}
-        className="glass-card group relative flex h-full flex-col overflow-hidden rounded border hover:shadow-[0_0_30px_rgba(0,240,255,0.08)]"
+        className="glass-card group relative flex h-full flex-col overflow-hidden rounded border"
       >
         <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/15" />
         <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/15" />
@@ -77,7 +77,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           </div>
         ) : (
           <div className="flex aspect-video items-center justify-center bg-gradient-to-br from-cyan/3 via-transparent to-magenta/3">
-            <div className="flex h-16 w-16 items-center justify-center rounded border border-cyan/10 bg-cyan/5 text-2xl font-bold text-cyan/60 transition-all group-hover:border-cyan/25 group-hover:text-cyan group-hover:shadow-[0_0_20px_rgba(0,240,255,0.15)]">
+            <div className="flex h-16 w-16 items-center justify-center rounded border border-cyan/10 bg-cyan/5 text-2xl font-bold text-cyan/60 transition-all group-hover:border-cyan/25 group-hover:text-cyan">
               {project.name.charAt(0)}
             </div>
           </div>

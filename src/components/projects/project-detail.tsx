@@ -140,7 +140,7 @@ export function ProjectDetail({ project }: { project: Project }) {
                 <button
                   key={i}
                   onClick={() => setLightboxIndex(i)}
-                  className="glass-card overflow-hidden rounded border transition-all hover:border-cyan/30 hover:shadow-[0_0_20px_rgba(0,240,255,0.05)]"
+                  className="glass-card overflow-hidden rounded border transition-all hover:border-cyan/30"
                 >
                   <img
                     src={src}
