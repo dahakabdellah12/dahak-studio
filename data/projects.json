@@ -45,12 +45,15 @@
     "slug": "wifi-keys",
     "name": "Wifi-Keys",
     "shortDescription": ".NET MAUI Android app for WiFi password recovery using fh_/wlan character substitution algorithm. Arabic/English/French. Dark/Light theme.",
-    "fullDescription": "# Wifi-Keys\n\nتطبيق Android لاكتشاف شبكات WiFi القريبة واستخراج كلمات المرور باستخدام خوارزمية تحويل الأحرف المخصصة.\n\n **ملاحظة:** هذا التطبيق مخصص فقط للشبكات التي تبدأ بـ `fh_` أو `wlan` — وهي شبكات مشفرة بخوارزمية معروفة.\n\n## المميزات\n\n- مسح شبكات WiFi القريبة\n- استخراج كلمات المرور للشبكات المدعومة (`fh_` / `wlan`)\n- واجهة عربية / إنجليزية / فرنسية\n- وضع النهار والليل مع كشف تلقائي من النظام\n- اتصال مباشر بالشبكة\n- نسخ كلمة المرور\n\n## التقنيات\n\n| التقنية | التفاصيل |\n|---------|----------|\n| .NET 8 | إطار العمل الأساسي |\n| .NET MAUI | واجهة متعددة المنصات |\n| C# | لغة البرمجة |\n| Android SDK 34 | API 34 (Android 14) |\n\n## الخوارزمية\n\n```\na↔5, b↔4, c↔3, d↔2, e↔1, f↔0, 7↔8, 6↔9\nfh_ ↔ wlan\n```\n\n**مثال:**\n`fh_7d8d0f_5G` → إزالة `_5G` → `fh_7d8d0f` → استبدال → `wlan8272f0`\n\n## البناء\n\n### المتطلبات\n- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)\n- Android SDK 34\n- جهاز Android (API 23+)\n\n### بناء APK\n\n```bash\ndotnet build -c Release\n```\n\nAPK سيكون في:\n```\nWifiKeys/bin/Release/net8.0-android/com.wifikeys.app-Signed.apk\n```\n\n### تشغيل على جهاز\n\n```bash\nadb install com.wifikeys.app-Signed.apk\n```\n\n## الدعم\n\n| الشبكة | الحالة |\n|--------|--------|\n| `fh_*` | مدعوم بالكامل |\n| `wlan*` | مدعوم بالكامل |\n| `wlan_*` | مدعوم بالكامل |\n| `dlink*` | غير مدعوم حالياً |\n| `ZTE_*` | غير مدعوم حالياً |\n\n## اللicense\n\n[MIT License](LICENSE)\n\n## المساهمة\n\nمرحبا بالمساهمات! يمكنك:\n1. Fork المشروع\n2. إنشاء branch جديد\n3. إرسال Pull Request",
+    "fullDescription": "تطبيق Android لاكتشاف شبكات WiFi القريبة واستخراج كلمات المرور باستخدام خوارزمية تحويل الأحرف المخصصة.\n\n **ملاحظة:** هذا التطبيق مخصص فقط للشبكات التي تبدأ بـ `fh_` أو `wlan` — وهي شبكات مشفرة بخوارزمية معروفة.",
     "thumbnail": "",
     "screenshots": [],
     "category": "open-source",
     "technologies": [
-      "C#"
+      "C#",
+      "NET 8",
+      "NET MAUI",
+      "Android SDK 34 | API 34 (Android 14)"
     ],
     "status": "released",
     "platforms": [
