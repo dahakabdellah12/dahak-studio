@@ -48,7 +48,7 @@
     "fullDescription": "تطبيق Android لاكتشاف شبكات WiFi القريبة واستخراج كلمات المرور باستخدام خوارزمية تحويل الأحرف المخصصة.\n\nملاحظة:\n هذا التطبيق مخصص فقط للشبكات التي تبدأ بـ `fh_` أو `wlan` — وهي شبكات مشفرة بخوارزمية معروفة.",
     "thumbnail": "",
     "screenshots": [],
-    "category": "open-source",
+    "category": "mobile",
     "technologies": [
       "C#",
       "NET 8",
@@ -59,11 +59,11 @@
     "platforms": [
       "android"
     ],
-    "version": "",
+    "version": "2.0",
     "lastUpdated": "2026-07-15",
     "githubUrl": "https://github.com/dahakabdellah12/Wifi-Keys",
     "websiteUrl": "",
-    "downloadUrl": "",
+    "downloadUrl": "https://github.com/dahakabdellah12/Wifi-Keys/raw/master/Wifi%20Keys.apk",
     "docsUrl": "",
     "license": "MIT",
     "stars": 0,
