@@ -13,7 +13,10 @@
       "NET 8",
       "ASP.NET Core Minimal API",
       "EF Core + SQLite",
-      "Vanilla JS"
+      "Vanilla JS",
+      "Docker",
+      "Render",
+      "GitHub Actions CI/CD"
     ],
     "status": "in-development",
     "platforms": [
