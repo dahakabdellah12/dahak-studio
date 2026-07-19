@@ -32,12 +32,12 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-10 glass-card rounded border overflow-hidden"
+          className="mt-10 glass-card rounded border relative"
         >
-          <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/15" />
-          <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/15" />
-          <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/15" />
-          <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/15" />
+          <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/25" />
+          <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/25" />
+          <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/25" />
+          <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/25" />
 
           {fields.map((field, i) => (
             <div

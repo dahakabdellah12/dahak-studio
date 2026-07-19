@@ -28,10 +28,10 @@ export default function ContactPage() {
           className="mt-10 space-y-6"
         >
           <div className="glass-card relative rounded border p-6">
-            <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/15" />
-            <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/15" />
-            <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/15" />
-            <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/15" />
+            <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/25" />
+            <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/25" />
+            <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/25" />
+            <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/25" />
 
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded border border-cyan/10 bg-cyan/5">
@@ -45,10 +45,10 @@ export default function ContactPage() {
           </div>
 
           <div className="glass-card relative rounded border p-6">
-            <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/15" />
-            <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/15" />
-            <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/15" />
-            <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/15" />
+            <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/25" />
+            <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/25" />
+            <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/25" />
+            <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/25" />
 
             <h3 className="mb-4 text-xs font-bold tracking-[0.15em] text-cyan/50 uppercase">
               // شبكاتي

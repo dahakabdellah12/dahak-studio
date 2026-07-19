@@ -48,6 +48,10 @@ export function SocialLinksList({ className, skeletonCount }: { className?: stri
             key={social.name}
             href={social.url}
             {...(!isEmail ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            onClick={isEmail ? (e) => {
+              e.preventDefault();
+              window.location.href = social.url;
+            } : undefined}
             className="flex h-9 w-9 items-center justify-center rounded border border-border bg-secondary/50 text-muted-foreground transition-all hover:border-cyan/30 hover:text-cyan hover:shadow-[0_0_10px_rgba(0,240,255,0.1)]"
             aria-label={social.name}
           >
