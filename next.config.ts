@@ -11,7 +11,7 @@ const securityHeaders = [
 ];
 
 const cacheHeaders = [
-  { key: "Cache-Control", value: "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400" },
+  { key: "Cache-Control", value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" },
 ];
 
 const noCacheHeaders = [

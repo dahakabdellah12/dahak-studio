@@ -6,16 +6,16 @@ export const revalidate = 3600;
 
 async function fetchReadme(owner: string, repo: string, token: string): Promise<string | null> {
   try {
-    const res = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/readme`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/vnd.github.v3+json",
-        },
-        cache: "no-store",
-      }
-    );
+      const res = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/readme`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          next: { revalidate: 3600 },
+        }
+      );
     if (!res.ok) return null;
     const data = await res.json();
     if (data.encoding === "base64" && data.content) {
@@ -34,16 +34,16 @@ async function fetchReadme(owner: string, repo: string, token: string): Promise<
 
 async function fetchLatestRelease(owner: string, repo: string, token: string): Promise<{ tag: string; date: string | null } | null> {
   try {
-    const res = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/vnd.github.v3+json",
-        },
-        cache: "no-store",
-      }
-    );
+      const res = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          next: { revalidate: 3600 },
+        }
+      );
     if (res.ok) {
       const data = await res.json();
       return { tag: data.tag_name, date: data.published_at?.split("T")[0] || null };
@@ -56,7 +56,7 @@ async function fetchLatestRelease(owner: string, repo: string, token: string): P
           Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github.v3+json",
         },
-        cache: "no-store",
+        next: { revalidate: 3600 },
       }
     );
     if (tagsRes.ok) {
@@ -84,7 +84,7 @@ export async function GET() {
         Authorization: `Bearer ${token}`,
         Accept: "application/vnd.github.v3+json",
       },
-      cache: "no-store",
+      next: { revalidate: 3600 },
     }
   );
 

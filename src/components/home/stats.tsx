@@ -34,6 +34,13 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   );
 }
 
+interface StatsProps {
+  totalProjects: number;
+  githubRepos: number;
+  githubStars: number;
+  githubCommits: number;
+}
+
 const statItems = [
   {
     icon: FolderOpen,
@@ -61,28 +68,8 @@ const statItems = [
   },
 ];
 
-export function Stats() {
-  const [stats, setStats] = useState({
-    totalProjects: 0,
-    githubRepos: 0,
-    githubStars: 0,
-    githubCommits: 0,
-  });
-
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/projects").then((r) => r.json()).catch(() => []),
-      fetch("/api/github/stats").then((r) => r.json()).catch(() => ({ githubRepos: 0, githubStars: 0, githubCommits: 0 })),
-    ]).then(([projects, gh]) => {
-      setStats({
-        totalProjects: Array.isArray(projects) ? projects.length : 0,
-        githubRepos: gh.githubRepos || 0,
-        githubStars: gh.githubStars || 0,
-        githubCommits: gh.githubCommits || 0,
-      });
-    });
-  }, []);
-
+export function Stats({ totalProjects, githubRepos, githubStars, githubCommits }: StatsProps) {
+  const stats = { totalProjects, githubRepos, githubStars, githubCommits };
   const hasData = Object.values(stats).some((v) => v > 0);
 
   if (!hasData) return null;

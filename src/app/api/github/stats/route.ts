@@ -29,7 +29,7 @@ export async function GET() {
   try {
     const reposRes = await fetch(
       "https://api.github.com/user/repos?per_page=100&sort=updated&type=public",
-      { headers: authHeaders(token), cache: "no-store" }
+      { headers: authHeaders(token), next: { revalidate: 3600 } }
     );
 
     let githubRepos = 0;
@@ -50,7 +50,7 @@ export async function GET() {
     try {
       const userRes = await fetch("https://api.github.com/user", {
         headers: authHeaders(token),
-        cache: "no-store",
+        next: { revalidate: 3600 },
       });
       if (userRes.ok) {
         const user = await userRes.json();
@@ -63,7 +63,7 @@ export async function GET() {
               Authorization: `Bearer ${token}`,
               Accept: "application/vnd.github.cloak-preview+json",
             },
-            cache: "no-store",
+            next: { revalidate: 3600 },
           }
         );
         if (commitsRes.ok) {

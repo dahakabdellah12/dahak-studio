@@ -5,6 +5,8 @@ import crypto from "crypto";
 import { sanitizeString, sanitizeArray, isValidHttpUrl } from "@/lib/utils";
 import type { ProjectCategory, Platform, ProjectStatus } from "@/lib/types";
 
+export const revalidate = 3600;
+
 const MAX_BODY_SIZE = 1024 * 500;
 
 const VALID_CATEGORIES: ProjectCategory[] = [

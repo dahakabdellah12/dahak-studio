@@ -1,26 +1,17 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProjectCard } from "@/components/projects/project-card";
 import type { Project } from "@/lib/types";
 
-export function FeaturedProjects() {
-  const [featured, setFeatured] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+interface FeaturedProjectsProps {
+  projects: Project[];
+}
 
-  useEffect(() => {
-    fetch("/api/projects")
-      .then((res) => res.json())
-      .then((data) => setFeatured(data.filter((p: Project) => p.featured)))
-      .catch(() => setFeatured([]))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return null;
-  if (featured.length === 0) return null;
+export function FeaturedProjects({ projects }: FeaturedProjectsProps) {
+  if (projects.length === 0) return null;
 
   return (
     <section className="relative py-24">
@@ -50,7 +41,7 @@ export function FeaturedProjects() {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-5 items-stretch sm:grid-cols-2 lg:grid-cols-3">
-          {featured.slice(0, 6).map((project, i) => (
+          {projects.slice(0, 6).map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}
         </div>

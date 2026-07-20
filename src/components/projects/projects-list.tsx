@@ -1,0 +1,53 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { ProjectCard } from "@/components/projects/project-card";
+import type { Project } from "@/lib/types";
+
+interface ProjectsListProps {
+  projects: Project[];
+}
+
+export function ProjectsList({ projects }: ProjectsListProps) {
+  return (
+    <div className="pt-24 pb-16">
+      <div className="mx-auto max-w-6xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-10"
+        >
+          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+            // الأعمال
+          </p>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            جميع المشاريع
+          </h1>
+        </motion.div>
+
+        {projects.length > 0 ? (
+          <div className="grid grid-cols-1 gap-5 items-stretch sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project, i) => (
+              <ProjectCard key={project.id} project={project} index={i} />
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center py-24 text-center"
+          >
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary text-4xl font-bold text-muted-foreground">
+              ؟
+            </div>
+            <h3 className="text-lg font-semibold">لم يتم العثور على مشاريع</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              لم تُضف أي مشاريع بعد.
+            </p>
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+}

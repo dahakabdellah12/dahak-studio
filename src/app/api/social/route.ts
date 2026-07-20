@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getSocialLinks, saveSocialLinks } from "@/lib/data/social-store";
 import { isValidHttpUrl } from "@/lib/utils";
 import type { SocialLink } from "@/lib/types";
+
+export const revalidate = 3600;
 
 const VALID_ICONS = ["github", "twitter", "linkedin", "youtube", "discord", "telegram", "email", "website"];
 
@@ -43,6 +46,8 @@ export async function PUT(request: NextRequest) {
     }
 
     await saveSocialLinks(sanitized);
+    revalidatePath("/");
+    revalidatePath("/about");
     return NextResponse.json(sanitized);
   } catch (err) {
     console.error("Failed to save social links:", err);
