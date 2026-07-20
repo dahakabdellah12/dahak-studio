@@ -134,6 +134,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="theme-color" content="#0a0a0f" />
+        <meta name="google-site-verification" content="tUaJoPMXaqDNY6R-Z3CeHNuaSdo9Xwhk0_LhEEyMPLo" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
