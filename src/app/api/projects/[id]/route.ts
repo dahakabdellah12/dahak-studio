@@ -1,4 +1,5 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getProjectById, updateProject, deleteProject } from "@/lib/data/projects-store";
 import { sanitizeString, sanitizeArray, isValidHttpUrl } from "@/lib/utils";
 import type { ProjectCategory, Platform, ProjectStatus } from "@/lib/types";
@@ -121,6 +122,9 @@ export async function PUT(
     if (!updated) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
+    revalidatePath("/");
+    revalidatePath("/projects");
+    revalidatePath(`/projects/${updated.slug}`);
     return NextResponse.json(updated);
   } catch (err) {
     console.error("Failed to update project:", err);
@@ -138,6 +142,8 @@ export async function DELETE(
     if (!deleted) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
+    revalidatePath("/");
+    revalidatePath("/projects");
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Failed to delete project:", err);

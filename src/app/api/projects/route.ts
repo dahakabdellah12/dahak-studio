@@ -1,4 +1,5 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getProjects, addProject } from "@/lib/data/projects-store";
 import crypto from "crypto";
 import { sanitizeString, sanitizeArray, isValidHttpUrl } from "@/lib/utils";
@@ -110,6 +111,8 @@ export async function POST(request: NextRequest) {
     };
 
     const created = await addProject(project);
+    revalidatePath("/");
+    revalidatePath("/projects");
     return NextResponse.json(created, { status: 201 });
   } catch (err) {
     console.error("Failed to create project:", err);
