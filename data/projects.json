@@ -107,8 +107,6 @@
     "status": "released",
     "platforms": [
       "windows",
-      "android",
-      "linux",
       "web"
     ],
     "version": "1.2.0",
