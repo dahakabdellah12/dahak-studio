@@ -2,10 +2,13 @@ import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
-    sitemap: "https://dahakstudio.com/sitemap.xml",
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/dashboard/", "/api/auth/"],
+      },
+    ],
+    sitemap: "https://dahak-studio.vercel.app/sitemap.xml",
   };
 }
