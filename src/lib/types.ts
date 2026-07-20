@@ -23,6 +23,7 @@ export interface Project {
   fullDescription?: string;
   thumbnail?: string;
   screenshots?: string[];
+  notes?: string;
   category: ProjectCategory;
   technologies: string[];
   status: ProjectStatus;

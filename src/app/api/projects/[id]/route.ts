@@ -3,7 +3,7 @@ import { getProjectById, updateProject, deleteProject } from "@/lib/data/project
 import { sanitizeString, sanitizeArray, isValidHttpUrl } from "@/lib/utils";
 import type { ProjectCategory, Platform, ProjectStatus } from "@/lib/types";
 
-const MAX_BODY_SIZE = 1024 * 100;
+const MAX_BODY_SIZE = 1024 * 500;
 
 const VALID_CATEGORIES: ProjectCategory[] = [
   "desktop", "mobile", "game", "open-source", "os", "library", "design", "experiment", "article",
@@ -61,6 +61,7 @@ export async function PUT(
     if (body.downloads !== undefined) data.downloads = typeof body.downloads === "number" ? Math.max(0, Math.floor(body.downloads)) : 0;
     if (body.featured !== undefined) data.featured = body.featured === true;
     if (body.features !== undefined) data.features = sanitizeArray(body.features, 30, 200);
+    if (body.notes !== undefined) data.notes = sanitizeString(body.notes, 10000);
     if (body.changelog !== undefined) data.changelog = Array.isArray(body.changelog) ? body.changelog.slice(0, 50) : [];
     if (body.timeline !== undefined) data.timeline = Array.isArray(body.timeline) ? body.timeline.slice(0, 50) : [];
 
@@ -82,7 +83,7 @@ export async function PUT(
     }
 
     if (body.screenshots !== undefined) {
-      const shots = sanitizeArray(body.screenshots, 10, 500);
+      const shots = sanitizeArray(body.screenshots, 50, 500);
       for (const s of shots) {
         if (!isValidHttpUrl(s)) {
           return NextResponse.json({ error: "Invalid screenshot URL" }, { status: 400 });

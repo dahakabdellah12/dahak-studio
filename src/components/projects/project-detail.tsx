@@ -11,6 +11,12 @@ import {
   ChevronRight,
   ChevronLeft,
   X,
+  Monitor,
+  Smartphone,
+  Terminal,
+  Globe,
+  Layers,
+  FileText,
 } from "lucide-react";
 import { GithubIcon } from "@/components/social-icons";
 import type { Project } from "@/lib/types";
@@ -36,6 +42,15 @@ function getStatusLabel(status: Project["status"]) {
     case "archived": return "مؤرشف";
   }
 }
+
+const platformInfo: Record<string, { label: string; icon: typeof Monitor; color: string }> = {
+  windows: { label: "ويندوز", icon: Monitor, color: "text-blue-400" },
+  android: { label: "أندرويد", icon: Smartphone, color: "text-emerald-400" },
+  linux: { label: "لينكس", icon: Terminal, color: "text-yellow-neon" },
+  web: { label: "ويب", icon: Globe, color: "text-cyan" },
+  ios: { label: "آيوس", icon: Smartphone, color: "text-muted-foreground" },
+  multi: { label: "متعدد المنصات", icon: Layers, color: "text-magenta" },
+};
 
 export function ProjectDetail({ project }: { project: Project }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -245,6 +260,28 @@ export function ProjectDetail({ project }: { project: Project }) {
               </motion.section>
             )}
 
+            {project.notes && (
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <h2 className="mb-4 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
+                  // ملاحظات
+                </h2>
+                <div className="glass-card rounded border p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <FileText className="h-4 w-4 text-cyan/60" />
+                    <span className="text-xs text-cyan/60 font-mono">NOTES</span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
+                    {project.notes}
+                  </p>
+                </div>
+              </motion.section>
+            )}
+
             {project.changelog && project.changelog.length > 0 && (
               <motion.section
                 initial={{ opacity: 0, y: 20 }}
@@ -335,12 +372,17 @@ export function ProjectDetail({ project }: { project: Project }) {
               <h3 className="text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase">
                 المنصات
               </h3>
-              <div className="flex flex-wrap gap-1.5">
-                {project.platforms.map((p) => (
-                  <span key={p} className="rounded border border-border bg-secondary/50 px-2 py-0.5 text-xs text-muted-foreground capitalize">
-                    {p === "multi" ? "متعدد المنصات" : p === "windows" ? "ويندوز" : p === "android" ? "أندرويد" : p === "linux" ? "لينكس" : p === "web" ? "ويب" : p === "ios" ? "آيوس" : p}
-                  </span>
-                ))}
+              <div className="space-y-2">
+                {project.platforms.map((p) => {
+                  const info = platformInfo[p] || { label: p, icon: Monitor, color: "text-muted-foreground" };
+                  const Icon = info.icon;
+                  return (
+                    <div key={p} className="flex items-center gap-2.5 rounded border border-border bg-secondary/30 px-3 py-2">
+                      <Icon className={`h-4 w-4 ${info.color}`} />
+                      <span className="text-sm">{info.label}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 

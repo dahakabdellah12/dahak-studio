@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Plus, X } from "lucide-react";
 import type { Project, ProjectCategory, Platform, ProjectStatus } from "@/lib/types";
 
 const categories: { value: ProjectCategory; label: string }[] = [
@@ -57,11 +58,30 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
   const [downloadUrl, setDownloadUrl] = useState(initial?.downloadUrl || "");
   const [license, setLicense] = useState(initial?.license || "");
   const [featuresText, setFeaturesText] = useState(initial?.features?.join("\n") || "");
+  const [screenshots, setScreenshots] = useState<string[]>(initial?.screenshots || []);
+  const [newScreenshotUrl, setNewScreenshotUrl] = useState("");
+  const [notes, setNotes] = useState(initial?.notes || "");
 
   const togglePlatform = (p: Platform) => {
     setPlatformsList((prev) =>
       prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]
     );
+  };
+
+  const addScreenshot = () => {
+    const url = newScreenshotUrl.trim();
+    if (!url) return;
+    if (!/^https?:\/\/.+/.test(url)) {
+      setError("رابط الصورة يجب أن يبدأ بـ http:// أو https://");
+      return;
+    }
+    setScreenshots((prev) => [...prev, url]);
+    setNewScreenshotUrl("");
+    setError("");
+  };
+
+  const removeScreenshot = (index: number) => {
+    setScreenshots((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -85,6 +105,8 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
       downloadUrl,
       license,
       features: featuresText.split("\n").filter(Boolean),
+      screenshots,
+      notes,
     };
 
     try {
@@ -114,7 +136,7 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
   };
 
   const inputClass =
-    "w-full rounded border border-border bg-secondary/50 px-4 py-2.5 text-sm outline-none transition-all focus:border-cyan focus:ring-1 focus:ring-cyan focus:shadow-[0_0_10px_rgba(0,240,255,0.05)]";
+    "w-full rounded border border-border bg-secondary/50 px-4 py-2.5 text-sm outline-none transition-all focus:border-cyan focus:ring-1 focus:ring-cyan";
   const labelClass = "block mb-1.5 text-xs font-medium text-muted-foreground";
   const sectionTitle = "mb-4 text-xs font-bold tracking-[0.15em] text-cyan/70 uppercase";
 
@@ -221,7 +243,7 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
               onClick={() => togglePlatform(p.value)}
               className={`rounded border px-3 py-1.5 text-xs transition-all ${
                 platformsList.includes(p.value)
-                  ? "border-cyan/50 bg-cyan/10 text-cyan shadow-[0_0_10px_rgba(0,240,255,0.1)]"
+                  ? "border-cyan/50 bg-cyan/10 text-cyan"
                   : "border-border bg-secondary/50 text-muted-foreground hover:border-cyan/20 hover:text-foreground"
               }`}
             >
@@ -311,6 +333,58 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
       <div className="glass-card relative rounded border p-6">
         <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
         <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
+        <h2 className={sectionTitle}>// الصور ({screenshots.length})</h2>
+        <div className="space-y-3">
+          {screenshots.map((url, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <span className="shrink-0 text-xs font-mono text-muted-foreground w-6 text-center">
+                {i + 1}
+              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={url}
+                alt={`صورة ${i + 1}`}
+                className="h-12 w-20 shrink-0 rounded border border-border object-cover"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              />
+              <input
+                type="url"
+                value={url}
+                readOnly
+                className="flex-1 rounded border border-border bg-secondary/30 px-3 py-1.5 text-xs text-muted-foreground font-mono"
+              />
+              <button
+                type="button"
+                onClick={() => removeScreenshot(i)}
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-border text-muted-foreground transition-all hover:border-magenta/30 hover:text-magenta"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+          <div className="flex items-center gap-2">
+            <input
+              type="url"
+              value={newScreenshotUrl}
+              onChange={(e) => setNewScreenshotUrl(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addScreenshot(); } }}
+              placeholder="https://example.com/screenshot.png"
+              className="flex-1 rounded border border-border bg-secondary/50 px-4 py-2.5 text-sm outline-none transition-all focus:border-cyan"
+            />
+            <button
+              type="button"
+              onClick={addScreenshot}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-cyan/30 bg-cyan/5 text-cyan transition-all hover:bg-cyan/10"
+            >
+              <Plus className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="glass-card relative rounded border p-6">
+        <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
+        <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
         <h2 className={sectionTitle}>// الميزات</h2>
         <div className="space-y-4">
           <div>
@@ -326,11 +400,27 @@ export function ProjectForm({ initial, mode }: ProjectFormProps) {
         </div>
       </div>
 
+      <div className="glass-card relative rounded border p-6">
+        <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/30" />
+        <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/30" />
+        <h2 className={sectionTitle}>// ملاحظات المشروع</h2>
+        <div>
+          <label className={labelClass}>ملاحظات خاصة بالمشروع (وصف، ميزات، أي ملاحظات)</label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            className={inputClass}
+            rows={6}
+            placeholder={"أضف ملاحظاتك هنا...\n\nيمكنك كتابة أي معلومات إضافية عن المشروع"}
+          />
+        </div>
+      </div>
+
       <div className="flex gap-3">
         <button
           type="submit"
           disabled={loading}
-          className="rounded border border-cyan/40 bg-cyan/10 px-6 py-2.5 text-sm font-medium text-cyan transition-all hover:bg-cyan/20 hover:border-cyan/60 hover:shadow-[0_0_20px_rgba(0,240,255,0.2)] disabled:opacity-50"
+          className="rounded border border-cyan/40 bg-cyan/10 px-6 py-2.5 text-sm font-medium text-cyan transition-all hover:bg-cyan/20 hover:border-cyan/60 disabled:opacity-50"
         >
           {loading ? "جاري الحفظ..." : mode === "edit" ? "حفظ التعديلات" : "إنشاء المشروع"}
         </button>

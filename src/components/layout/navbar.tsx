@@ -37,9 +37,11 @@ export function Navbar() {
       transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-        scrolled
-          ? "bg-background/95 backdrop-blur-md border-b border-cyan/10 shadow-[0_0_20px_rgba(0,240,255,0.05)]"
-          : "bg-background"
+        isOpen
+          ? "bg-background"
+          : scrolled
+            ? "bg-background border-b border-cyan/10"
+            : "bg-background"
       )}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
@@ -107,7 +109,7 @@ export function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-72 border-l border-cyan/20 bg-background/98 backdrop-blur-xl md:hidden"
+              className="fixed top-0 right-0 bottom-0 z-50 w-72 border-l border-cyan/20 bg-background md:hidden"
             >
               {/* Top accent line */}
               <div className="h-px bg-gradient-to-r from-cyan/50 via-cyan to-cyan/50" />
@@ -174,7 +176,7 @@ export function Navbar() {
               </div>
 
               {/* Bottom section */}
-              <div className="absolute bottom-0 left-0 right-0 border-t border-border bg-background/50 p-5">
+              <div className="absolute bottom-0 left-0 right-0 border-t border-border bg-background p-5">
                 <div className="flex items-center gap-2 text-[10px] font-mono tracking-wider text-muted-foreground/40 uppercase">
                   <span className="h-1 w-1 rounded-full bg-emerald-500" />
                   <span>system.online</span>

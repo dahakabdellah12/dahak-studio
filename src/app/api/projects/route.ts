@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { sanitizeString, sanitizeArray, isValidHttpUrl } from "@/lib/utils";
 import type { ProjectCategory, Platform, ProjectStatus } from "@/lib/types";
 
-const MAX_BODY_SIZE = 1024 * 100;
+const MAX_BODY_SIZE = 1024 * 500;
 
 const VALID_CATEGORIES: ProjectCategory[] = [
   "desktop", "mobile", "game", "open-source", "os", "library", "design", "experiment", "article",
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid docs URL" }, { status: 400 });
     }
 
-    const screenshots = sanitizeArray(body.screenshots, 10, 500);
+    const screenshots = sanitizeArray(body.screenshots, 50, 500);
     for (const s of screenshots) {
       if (!isValidHttpUrl(s)) {
         return NextResponse.json({ error: "Invalid screenshot URL" }, { status: 400 });
@@ -71,14 +71,18 @@ export async function POST(request: NextRequest) {
     }
 
     const existingProjects = await getProjects();
+    const slug = sanitizeString(body.slug, 100) || name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
     const githubRepoId = typeof body.githubRepoId === "number" ? body.githubRepoId : null;
     if (githubRepoId && existingProjects.some((p) => p.githubRepoId === githubRepoId)) {
       return NextResponse.json({ error: "Project already imported" }, { status: 409 });
     }
+    if (existingProjects.some((p) => p.slug === slug)) {
+      return NextResponse.json({ error: "A project with this slug already exists" }, { status: 409 });
+    }
 
     const project = {
       id: crypto.randomUUID(),
-      slug: sanitizeString(body.slug, 100) || name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
+      slug,
       name,
       shortDescription: sanitizeString(body.shortDescription, 300),
       fullDescription: sanitizeString(body.fullDescription, 5000),
@@ -99,6 +103,7 @@ export async function POST(request: NextRequest) {
       downloads: typeof body.downloads === "number" ? Math.max(0, Math.floor(body.downloads)) : 0,
       featured: body.featured === true,
       features: sanitizeArray(body.features, 30, 200),
+      notes: sanitizeString(body.notes, 10000),
       changelog: Array.isArray(body.changelog) ? body.changelog.slice(0, 50) : [],
       timeline: Array.isArray(body.timeline) ? body.timeline.slice(0, 50) : [],
       ...(githubRepoId ? { githubRepoId } : {}),
