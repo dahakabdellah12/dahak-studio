@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getProjects } from "@/lib/data/projects-store";
 import type { GitHubRepo } from "@/lib/types";
 
+export const revalidate = 3600;
+
 async function fetchReadme(owner: string, repo: string, token: string): Promise<string | null> {
   try {
     const res = await fetch(

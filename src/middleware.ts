@@ -75,64 +75,6 @@ async function getRateLimitData(cookie: string | undefined): Promise<RateLimitDa
   }
 }
 
-async function createRateLimitCookie(data: RateLimitData): Promise<string> {
-  const secret = getSessionSecret();
-  const payload = `${data.count}:${data.resetAt}`;
-  const signature = await hmacSign(payload, secret);
-  return `${payload}:${signature}`;
-}
-
-function isValidHttpUrl(url: string): boolean {
-  if (!url) return true;
-  try {
-    const parsed = new URL(url);
-    return ["http:", "https:"].includes(parsed.protocol);
-  } catch {
-    return false;
-  }
-}
-
-function addSecurityHeaders(response: NextResponse): NextResponse {
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("X-XSS-Protection", "0");
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  response.headers.set(
-    "Permissions-Policy",
-    "camera=(), microphone=(), geolocation=()"
-  );
-  response.headers.set(
-    "Strict-Transport-Security",
-    "max-age=63072000; includeSubDomains; preload"
-  );
-  response.headers.set(
-    "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.githubusercontent.com https://images.unsplash.com https://*.github.com data: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.github.com; frame-ancestors 'none'"
-  );
-  return response;
-}
-
-const CACHE_CONTROL = "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400";
-const NO_CACHE = "no-store, no-cache, must-revalidate";
-
-function isPublicPage(pathname: string): boolean {
-  if (pathname.startsWith("/dashboard")) return false;
-  if (pathname.startsWith("/api/")) return false;
-  if (pathname === "/robots.txt" || pathname === "/sitemap.xml") return false;
-  return true;
-}
-
-function addCacheHeaders(response: NextResponse, pathname: string, method: string): NextResponse {
-  if (isPublicPage(pathname)) {
-    response.headers.set("Cache-Control", CACHE_CONTROL);
-  } else if (pathname.startsWith("/api/") && method === "GET" && !pathname.startsWith("/api/auth")) {
-    response.headers.set("Cache-Control", CACHE_CONTROL);
-  } else {
-    response.headers.set("Cache-Control", NO_CACHE);
-  }
-  return response;
-}
-
 function hasValidCsrfHeader(request: NextRequest): boolean {
   return request.headers.get("x-requested-with") === "xmlhttprequest" ||
     request.headers.get("x-csrf-token") !== null;
@@ -146,7 +88,6 @@ export async function middleware(request: NextRequest) {
     const rlCookie = request.cookies.get(RATE_LIMIT_COOKIE)?.value;
     const data = await getRateLimitData(rlCookie);
     const now = Date.now();
-
     if (data.resetAt > now && data.count >= RATE_LIMIT_MAX) {
       const retryAfter = Math.ceil((data.resetAt - now) / 1000);
       return NextResponse.json(
@@ -162,10 +103,7 @@ export async function middleware(request: NextRequest) {
       if (token && (await verifySessionToken(token))) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
-      const res = NextResponse.next();
-      addSecurityHeaders(res);
-      addCacheHeaders(res, pathname, method);
-      return res;
+      return NextResponse.next();
     }
 
     const token = request.cookies.get(SESSION_COOKIE)?.value;
@@ -186,14 +124,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const res = NextResponse.next();
-  addSecurityHeaders(res);
-  addCacheHeaders(res, pathname, method);
-  return res;
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
-  ],
+  matcher: ["/dashboard/:path*", "/api/projects/:path*", "/api/social/:path*", "/api/auth/:path*", "/api/github/:path*"],
 };

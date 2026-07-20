@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const revalidate = 3600;
+
 interface GitHubRepo {
   fork: boolean;
   stargazers_count: number;

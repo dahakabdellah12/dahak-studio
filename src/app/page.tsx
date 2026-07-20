@@ -5,6 +5,8 @@ import { FeaturedProjects } from "@/components/home/featured-projects";
 import { Timeline } from "@/components/home/timeline";
 import { Skills } from "@/components/home/skills";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "الرئيسية",
   description:
