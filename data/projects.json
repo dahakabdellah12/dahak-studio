@@ -23,7 +23,8 @@
     "platforms": [
       "windows",
       "linux",
-      "web"
+      "web",
+      "multi"
     ],
     "version": "1.1.0",
     "lastUpdated": "2026-07-18",
@@ -46,7 +47,8 @@
     ],
     "changelog": [],
     "timeline": [],
-    "githubRepoId": 1283935466
+    "githubRepoId": 1283935466,
+    "notes": ""
   },
   {
     "id": "07d64d9d-6dc4-4ad9-8d69-125d552cf78b",
