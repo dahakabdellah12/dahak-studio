@@ -96,8 +96,8 @@
     "id": "772b593f-ce82-4de4-ab63-d780614396db",
     "slug": "web-os",
     "name": "Web-OS",
-    "shortDescription": "Web OS — a complete desktop operating system that runs in your browser AND as a native desktop app via Electron. Kernel, VFS, window manager, terminal with real shell, 17 apps — zero framework dependencies.",
-    "fullDescription": "# Web OS\n\n**A complete desktop operating system — runs in your browser AND as a native desktop app via Electron.**\n\nKernel, persistent file system, window manager, terminal with a real shell,\nprocess scheduler, permission system, background services, and 17 applications\n— built entirely from scratch in TypeScript with **zero runtime dependencies**.\n\n---\n\n## Quick Start\n\n```sh\nnpm install\nnpm run dev          # Browser mode → http://localhost:5173\nnpm run electron:dev # Electron desktop mode (native windows, tray, shortcuts)\n```\n\nProduction build:\n```sh\nnpm run build        # Static site → dist/\nnpm run electron:start # Production Electron (run build first)\nnpm run build:electron # Package installer (NSIS/AppImage/deb)\n```\n\n---\n\n## Architecture\n\n```\nApps (17 applications)\n  │\n  ├─ system.* API  ←  Permission Layer  ←  PermissionManager\n  │\n  ├─ Service Layer   (FileIndex, AutoSave, NetworkWatch, GlobalSearch)\n  │\n  ├─ Kernel          (ProcessManager, ProcessScheduler, SystemEventBus)\n  │\n  ├─ VFS + IndexedDB (persistent virtual file system)\n  │\n  └─ System Control Layer (SCL) — Electron bridge\n       │\n       └─ Electron Main Process\n            │\n            ├─ Native FS (real filesystem via Node.js)\n            ├─ Hardware API (CPU, RAM, battery, displays)\n            ├─ Network API (real interfaces)\n            ├─ Clipboard (OS-level)\n            ├─ Native Dialogs (open/save/folder)\n            ├─ System Tray\n            ├─ Global Shortcuts (Win+E, Win+I, Win+R, etc.)\n            └─ Auto Updater\n```\n\n### Dual-Platform Design\n\n| Feature | Browser Mode | Electron Desktop Mode |\n|---------|-------------|----------------------|\n| **Storage** | IndexedDB (VFS) | VFS + real filesystem (Drives C:, D:, etc.) |\n| **Display** | Fixed size | Native resolution/refresh rate control |\n| **Filesystem** | Virtual only | Full real OS access (Desktop, Documents, Downloads, etc.) |\n| **Hardware** | Mock/simulated | Real CPU, RAM, battery, display info |\n| **Network** | Simulated | Real network interfaces and status |\n| **Clipboard** | Browser API | OS-level clipboard (text + image) |\n| **Dialogs** | Browser prompt() | Native file pickers |\n| **Power** | N/A | Shutdown, restart, sleep |\n| **System Tray** | N/A | Tray icon with context menu |\n| **Shortcuts** | N/A | Global hotkeys |\n\nAll 17 apps work identically in both modes. The SCL (System Control Layer) auto-detects Electron and delegates to native APIs.\n\n---\n\n## Applications\n\n| App | Description |\n|-----|-------------|\n| **Terminal (OrcaTerm/osh)** | Real shell: pipes `|`, redirection `` ``, ``, quoting, `~`/`$VAR` expansion, tab completion, persistent history, ~40 commands (`ls`, `grep`, `tree`, `ps`, `kill`, `neofetch`, `cowsay`, `js`, `curl`, …) |\n| **Files** | Grid/list views, breadcrumbs, cut/copy/paste, drag--drop, rubber band selection, rename/delete/properties, import/export, drive detection |\n| **Scribe** | Text editor with line numbers, dirty tracking, Ctrl+S, Markdown preview |\n| **Paint** | Pen/eraser/shapes/flood-fill/eyedropper, undo/redo, PNG export |\n| **Calculator** | Hand-written expression parser (no `eval`), history tape |\n| **Viewer** | Image viewer with zoom, set as wallpaper |\n| **Music Player** | Audio player, playlist management, shuffle, repeat |\n| **Video Player** | Video playback within the VFS |\n| **Keys** | Two-octave WebAudio synth piano with demo song |\n| **System Monitor** | Process table, End-task, CPU/heap charts, FPS |\n| **Task Manager** | Detailed process management with search/filter |\n| **Settings** | Themes (dark/light), accent colors, wallpapers, real display resolution/refresh rate, storage, factory reset |\n| **Clipboard** | Clipboard history manager with pin/unpin |\n| **Trash** | Restore or permanently delete trashed files |\n| **Network** | Connection status, IP config, real interface info |\n| **Screenshot** | Capture full screen, region, or active window |\n| **Welcome** | First-boot tour |\n\n---\n\n## Features\n\n### Desktop\n- Window manager with dragging, 8-direction resizing, edge snap, minimize/maximize/close\n- Taskbar with pinned apps, running processes, system tray, clock\n- Start menu with app launcher and file search\n- Desktop icons with rubber band selection, right-click context menus\n- Lock screen, boot sequence, shutdown screen\n- Multiple wallpapers, dark/light themes, accent colors\n\n### Filesystem\n- Full virtual file system persisted to IndexedDB (survives browser reloads)\n- In Electron mode: real OS drives (C:, D:, removable USB), Desktop/Documents/Downloads folders\n- Automatic USB drive detection and mounting (Windows)\n- Import/export files to/from the real computer\n- Trash with restore and permanent delete\n\n### Terminal (osh)\n- 40+ built-in commands\n- Pipe chains, redirection, command chaining\n- Tab completion, persistent history (up/down arrows)\n- Environment variables, home directory `~`\n- `js` command for inline JavaScript evaluation\n- `neofetch`, `cowsay`, `tree`, `curl`, `grep`\n\n### Native Desktop Features (E",
+    "shortDescription": "نظام تشغيل الويب (Web OS) - نظام تشغيل مكتبي متكامل يعمل في متصفحك وكتطبيق مكتبي أصلي عبر Electron. يتضمن نواة، ونظام ملفات افتراضي (VFS)، ومدير نوافذ، وطرفية مع واجهة سطر أوامر حقيقية، و17 تطبيقًا - بدون أي تبعيات على أطر العمل.",
+    "fullDescription": "نظام تشغيل مكتبي متكامل - يعمل في متصفحك وكتطبيق مكتبي أصلي عبر Electron.\n\nنواة، نظام ملفات دائم، مدير نوافذ، طرفية مع واجهة سطر أوامر حقيقية،\nجدولة عمليات، نظام صلاحيات، خدمات تعمل في الخلفية، و17 تطبيقًا\n\nمبني بالكامل من الصفر باستخدام TypeScript بدون أي تبعيات وقت التشغيل.",
     "thumbnail": "",
     "screenshots": [],
     "category": "open-source",
@@ -111,7 +111,7 @@
       "linux",
       "web"
     ],
-    "version": "",
+    "version": "1.2.0",
     "lastUpdated": "2026-07-19",
     "githubUrl": "https://github.com/dahakabdellah12/Web-OS",
     "websiteUrl": "",
@@ -122,25 +122,12 @@
     "downloads": 0,
     "featured": false,
     "features": [
-      "Window manager with dragging, 8-direction resizing, edge snap, minimize/maximize/close",
-      "Taskbar with pinned apps, running processes, system tray, clock",
-      "Start menu with app launcher and file search",
-      "Desktop icons with rubber band selection, right-click context menus",
-      "Lock screen, boot sequence, shutdown screen",
-      "Multiple wallpapers, dark/light themes, accent colors",
-      "Full virtual file system persisted to IndexedDB (survives browser reloads)",
-      "In Electron mode: real OS drives (C:, D:, removable USB), Desktop/Documents/Downloads folders",
-      "Automatic USB drive detection and mounting (Windows)",
-      "Import/export files to/from the real computer",
-      "Trash with restore and permanent delete",
-      "40+ built-in commands",
-      "Pipe chains, redirection, command chaining",
-      "Tab completion, persistent history (up/down arrows)",
-      "Environment variables, home directory ~"
+      "مدير نوافذ يدعم السحب، وتغيير الحجم في 8 اتجاهات، وتثبيت الحواف، والتصغير/التكبير/الإغلاق. شريط مهام مع تطبيقات مثبتة، وعمليات قيد التشغيل، وعلبة النظام، وساعة. قائمة ابدأ مع مشغل تطبيقات وبحث عن ملفا"
     ],
     "changelog": [],
     "timeline": [],
-    "githubRepoId": 1305567326
+    "githubRepoId": 1305567326,
+    "notes": ""
   },
   {
     "id": "ee0353db-ed2f-4f58-bf92-b3374d24bf3b",
