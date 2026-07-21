@@ -63,8 +63,20 @@ export async function PUT(
     if (body.featured !== undefined) data.featured = body.featured === true;
     if (body.features !== undefined) data.features = sanitizeArray(body.features, 30, 200);
     if (body.notes !== undefined) data.notes = sanitizeString(body.notes, 10000);
-    if (body.changelog !== undefined) data.changelog = Array.isArray(body.changelog) ? body.changelog.slice(0, 50) : [];
-    if (body.timeline !== undefined) data.timeline = Array.isArray(body.timeline) ? body.timeline.slice(0, 50) : [];
+    if (body.changelog !== undefined) {
+      data.changelog = Array.isArray(body.changelog) ? body.changelog.slice(0, 50).map((e: Record<string, unknown>) => ({
+        version: sanitizeString(e.version, 20),
+        date: sanitizeString(e.date, 10),
+        changes: Array.isArray(e.changes) ? e.changes.map((c: unknown) => sanitizeString(c, 300)).filter(Boolean).slice(0, 50) : [],
+      })) : [];
+    }
+    if (body.timeline !== undefined) {
+      data.timeline = Array.isArray(body.timeline) ? body.timeline.slice(0, 50).map((e: Record<string, unknown>) => ({
+        date: sanitizeString(e.date, 10),
+        title: sanitizeString(e.title, 100),
+        description: sanitizeString(e.description, 500),
+      })) : [];
+    }
 
     const urlFields: [string, string][] = [
       ["thumbnail", "thumbnail URL"],
@@ -111,7 +123,7 @@ export async function PUT(
     if (body.name !== undefined && !body.slug) {
       data.slug = (data.name as string).toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
     } else if (body.slug !== undefined) {
-      data.slug = sanitizeString(body.slug, 100);
+      data.slug = sanitizeString(body.slug, 100).toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
     }
 
     if (Object.keys(data).length === 0) {

@@ -1,7 +1,7 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const SESSION_COOKIE = "dahak_session";
-const RATE_LIMIT_COOKIE = "dahak_rl";
 
 function getSessionSecret(): string {
   const secret = process.env.DASHBOARD_SESSION_SECRET;
@@ -32,7 +32,6 @@ async function verifySessionToken(token: string): Promise<boolean> {
     const [timestamp, random, signature] = parts;
     const payload = `${timestamp}:${random}`;
     const expectedSignature = await hmacSign(payload, secret);
-    if (signature.length !== expectedSignature.length) return false;
     const encoder = new TextEncoder();
     const a = encoder.encode(signature);
     const b = encoder.encode(expectedSignature);
@@ -48,33 +47,6 @@ async function verifySessionToken(token: string): Promise<boolean> {
   }
 }
 
-const RATE_LIMIT_MAX = 5;
-const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
-
-interface RateLimitData {
-  count: number;
-  resetAt: number;
-}
-
-async function getRateLimitData(cookie: string | undefined): Promise<RateLimitData> {
-  if (!cookie) return { count: 0, resetAt: 0 };
-  try {
-    const parts = cookie.split(":");
-    if (parts.length !== 3) return { count: 0, resetAt: 0 };
-    const [countStr, resetAtStr, signature] = parts;
-    const payload = `${countStr}:${resetAtStr}`;
-    const secret = getSessionSecret();
-    const expectedSig = await hmacSign(payload, secret);
-    if (signature !== expectedSig) return { count: 0, resetAt: 0 };
-    const count = parseInt(countStr, 10);
-    const resetAt = parseInt(resetAtStr, 10);
-    if (isNaN(count) || isNaN(resetAt)) return { count: 0, resetAt: 0 };
-    return { count, resetAt };
-  } catch {
-    return { count: 0, resetAt: 0 };
-  }
-}
-
 function hasValidCsrfHeader(request: NextRequest): boolean {
   return request.headers.get("x-requested-with") === "xmlhttprequest" ||
     request.headers.get("x-csrf-token") !== null;
@@ -83,13 +55,11 @@ function hasValidCsrfHeader(request: NextRequest): boolean {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const method = request.method;
+  const ip = getClientIp(request);
 
   if (pathname.startsWith("/api/auth/login") && method === "POST") {
-    const rlCookie = request.cookies.get(RATE_LIMIT_COOKIE)?.value;
-    const data = await getRateLimitData(rlCookie);
-    const now = Date.now();
-    if (data.resetAt > now && data.count >= RATE_LIMIT_MAX) {
-      const retryAfter = Math.ceil((data.resetAt - now) / 1000);
+    const { allowed, retryAfter } = checkRateLimit(ip);
+    if (!allowed) {
       return NextResponse.json(
         { error: `Too many attempts. Try again in ${retryAfter} seconds.` },
         { status: 429 }

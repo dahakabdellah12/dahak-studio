@@ -45,10 +45,7 @@ export async function checkPassword(password: string): Promise<boolean> {
   const envPassword = process.env.DASHBOARD_PASSWORD;
   if (!envPassword) return false;
   if (password.length < 8) return false;
-  if (envPassword.startsWith("$2")) {
-    return bcrypt.compareSync(password, envPassword);
-  }
-  return bcrypt.compareSync(password, bcrypt.hashSync(envPassword, 10));
+  return bcrypt.compareSync(password, envPassword);
 }
 
 export async function createSession(): Promise<void> {

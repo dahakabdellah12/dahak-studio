@@ -74,7 +74,7 @@ async function fetchLatestRelease(owner: string, repo: string, token: string): P
 export async function GET() {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
-    return NextResponse.json({ error: "GITHUB_TOKEN not configured" }, { status: 500 });
+    return NextResponse.json({ error: "GitHub integration not available" }, { status: 500 });
   }
 
   const res = await fetch(

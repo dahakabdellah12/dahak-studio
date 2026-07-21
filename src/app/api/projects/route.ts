@@ -107,8 +107,16 @@ export async function POST(request: NextRequest) {
       featured: body.featured === true,
       features: sanitizeArray(body.features, 30, 200),
       notes: sanitizeString(body.notes, 10000),
-      changelog: Array.isArray(body.changelog) ? body.changelog.slice(0, 50) : [],
-      timeline: Array.isArray(body.timeline) ? body.timeline.slice(0, 50) : [],
+      changelog: Array.isArray(body.changelog) ? body.changelog.slice(0, 50).map((e: Record<string, unknown>) => ({
+        version: sanitizeString(e.version, 20),
+        date: sanitizeString(e.date, 10),
+        changes: Array.isArray(e.changes) ? e.changes.map((c: unknown) => sanitizeString(c, 300)).filter(Boolean).slice(0, 50) : [],
+      })) : [],
+      timeline: Array.isArray(body.timeline) ? body.timeline.slice(0, 50).map((e: Record<string, unknown>) => ({
+        date: sanitizeString(e.date, 10),
+        title: sanitizeString(e.title, 100),
+        description: sanitizeString(e.description, 500),
+      })) : [],
       ...(githubRepoId ? { githubRepoId } : {}),
     };
 
