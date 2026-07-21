@@ -1,13 +1,32 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ExternalLink, Mail } from "lucide-react";
-import { GithubIcon } from "@/components/social-icons";
+import { ExternalLink } from "lucide-react";
+import {
+  GithubIcon,
+  TwitterIcon,
+  LinkedInIcon,
+  YouTubeIcon,
+  DiscordIcon,
+  TelegramIcon,
+  WebsiteIcon,
+  InstagramIcon,
+  FacebookIcon,
+  EmailIcon,
+} from "@/components/social-icons";
 import type { SocialLink } from "@/lib/types";
 
 const iconMap: Record<string, React.ReactNode> = {
   github: <GithubIcon className="h-4.5 w-4.5" />,
-  email: <Mail className="h-4.5 w-4.5" />,
+  twitter: <TwitterIcon className="h-4.5 w-4.5" />,
+  linkedin: <LinkedInIcon className="h-4.5 w-4.5" />,
+  youtube: <YouTubeIcon className="h-4.5 w-4.5" />,
+  discord: <DiscordIcon className="h-4.5 w-4.5" />,
+  telegram: <TelegramIcon className="h-4.5 w-4.5" />,
+  instagram: <InstagramIcon className="h-4.5 w-4.5" />,
+  facebook: <FacebookIcon className="h-4.5 w-4.5" />,
+  email: <EmailIcon className="h-4.5 w-4.5" />,
+  website: <WebsiteIcon className="h-4.5 w-4.5" />,
 };
 
 function SocialSkeleton({ count = 2 }: { count?: number }) {
