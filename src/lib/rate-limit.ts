@@ -1,5 +1,3 @@
-import crypto from "crypto";
-
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
 
@@ -10,12 +8,14 @@ interface RateLimitEntry {
 
 const store = new Map<string, RateLimitEntry>();
 
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, entry] of store) {
-    if (entry.resetAt < now) store.delete(key);
-  }
-}, 60_000);
+if (typeof setInterval !== "undefined") {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, entry] of store) {
+      if (entry.resetAt < now) store.delete(key);
+    }
+  }, 60_000);
+}
 
 function getRateLimitKey(ip: string): string {
   return `rl:${ip}`;
@@ -53,11 +53,4 @@ export function getClientIp(request: Request): string {
   const real = request.headers.get("x-real-ip");
   if (real) return real;
   return "127.0.0.1";
-}
-
-export function constantTimeCompare(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  const bufA = Buffer.from(a);
-  const bufB = Buffer.from(b);
-  return crypto.timingSafeEqual(bufA, bufB);
 }

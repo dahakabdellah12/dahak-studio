@@ -1,5 +1,17 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
+const cspValue = [
+  "default-src 'self'",
+  `script-src 'self'${isDev ? " 'unsafe-eval'" : ""} 'unsafe-inline'`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' https://*.githubusercontent.com https://images.unsplash.com https://*.github.com data: blob:",
+  "font-src 'self' https://fonts.gstatic.com",
+  "connect-src 'self' https://api.github.com",
+  "frame-ancestors 'none'",
+].join("; ");
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
@@ -8,7 +20,7 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-Powered-By", value: "" },
-  { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.githubusercontent.com https://images.unsplash.com https://*.github.com data: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.github.com; frame-ancestors 'none'" },
+  { key: "Content-Security-Policy", value: cspValue },
 ];
 
 const cacheHeaders = [
