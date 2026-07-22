@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | DAHAK Studio",
   },
   description:
-    "DAHAK Studio (داهك ستوديو) — معرض أعمال Dahak Abdellah لتطوير البرمجيات. تطبيقات سطح مكتب، تطبيقات محمولة، ألعاب، مصادر مفتوحة. بني بالكامل بواسطة الذكاء الاصطناعي.",
+    "DAHAK Studio (داهك ستوديو) — معرض مشاريع Dahak Abdellah لتطوير البرمجيات من الجزائر. تطبيقات سطح مكتب، تطبيقات محمولة، ألعاب، ومصادر مفتوحة. تصفح المشاريع والتقنيات المستخدمة.",
   keywords: [
     "dahakstudio",
     "dahak studio",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     siteName: "DAHAK Studio | داهك ستوديو",
     title: "DAHAK Studio | داهك ستوديو",
     description:
-      "DAHAK Studio (داهك ستوديو) — معرض أعمال Dahak Abdellah لتطوير البرمجيات. تطبيقات سطح مكتب، تطبيقات محمولة، ألعاب، مصادر مفتوحة.",
+      "DAHAK Studio (داهك ستوديو) — معرض مشاريع Dahak Abdellah لتطوير البرمجيات من الجزائر. تطبيقات سطح مكتب، تطبيقات محمولة، ألعاب، ومصادر مفتوحة.",
     url: SITE_URL,
     images: [
       {
@@ -145,6 +145,7 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="theme-color" content="#0a0a0f" />
         <meta name="google-site-verification" content="tUaJoPMXaqDNY6R-Z3CeHNuaSdo9Xwhk0_LhEEyMPLo" />
