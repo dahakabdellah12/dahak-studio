@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { ProjectDetail } from "@/components/projects/project-detail";
 import type { Project } from "@/lib/types";
 
+const SITE_URL = "https://dahak-studio.vercel.app";
+
 export const revalidate = 3600;
 
 async function fetchProjectBySlug(slug: string): Promise<Project | null> {
@@ -35,8 +37,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const project = await fetchProjectBySlug(slug);
   if (!project) return {};
   return {
-    title: `${project.name} - DAHAK Studio`,
+    title: `${project.name} — DAHAK Studio | داهك ستوديو`,
     description: project.shortDescription,
+    alternates: {
+      canonical: `https://dahak-studio.vercel.app/projects/${project.slug}`,
+    },
+    openGraph: {
+      title: `${project.name} — DAHAK Studio`,
+      description: project.shortDescription,
+      url: `https://dahak-studio.vercel.app/projects/${project.slug}`,
+      images: project.thumbnail ? [{ url: project.thumbnail, width: 1200, height: 630, alt: project.name }] : undefined,
+    },
   };
 }
 
@@ -48,5 +59,45 @@ export default async function ProjectDetailPage({
   const { slug } = await params;
   const project = await fetchProjectBySlug(slug);
   if (!project) notFound();
-  return <ProjectDetail project={project} />;
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "الرئيسية", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "المشاريع", item: `${SITE_URL}/projects` },
+      { "@type": "ListItem", position: 3, name: project.name, item: `${SITE_URL}/projects/${project.slug}` },
+    ],
+  };
+
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: project.name,
+    description: project.shortDescription,
+    url: `${SITE_URL}/projects/${project.slug}`,
+    codeRepository: project.githubUrl || undefined,
+    programmingLanguage: project.technologies[0] || undefined,
+    runtimePlatform: project.platforms.join(", "),
+    license: project.license || undefined,
+    author: {
+      "@type": "Person",
+      name: "Dahak Abdellah",
+      url: SITE_URL,
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
+      />
+      <ProjectDetail project={project} />
+    </>
+  );
 }

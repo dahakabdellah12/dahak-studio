@@ -9,9 +9,12 @@ import type { Project } from "@/lib/types";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "الرئيسية",
+  title: "DAHAK Studio — مطور برمجيات | تطبيقات سطح مكتب، محمولة، ألعاب",
   description:
-    "معرض أعمال ومشاريع تطوير البرمجيات — DAHAK Studio",
+    "DAHAK Studio (داهك ستوديو) — معرض مشاريع Dahak Abdellah لتطوير البرمجيات. تطبيقات سطح مكتب، تطبيقات محمولة، ألعاب، ومصادر مفتوحة من الجزائر.",
+  alternates: {
+    canonical: "https://dahak-studio.vercel.app",
+  },
 };
 
 async function fetchProjects(): Promise<Project[]> {

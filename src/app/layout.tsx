@@ -81,6 +81,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: SITE_URL,
+    languages: {
+      "ar": SITE_URL,
+      "en": SITE_URL,
+    },
   },
 };
 
@@ -97,7 +101,7 @@ export default function RootLayout({
     url: SITE_URL,
     jobTitle: "Software Developer",
     description:
-      "DAHAK Studio — معرض أعمال ومشاريع تطوير البرمجيات oleh Dahak Abdellah",
+      "DAHAK Studio — معرض مشاريع تطوير البرمجيات بواسطة Dahak Abdellah",
     sameAs: [
       "https://github.com/dahakabdellah12",
     ],
@@ -107,7 +111,16 @@ export default function RootLayout({
       "Mobile Applications",
       "Game Development",
       "Open Source",
+      "C#",
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Next.js",
     ],
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "DZ",
+    },
   };
 
   const websiteJsonLd = {

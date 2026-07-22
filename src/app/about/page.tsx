@@ -1,57 +1,21 @@
-﻿"use client";
+﻿import type { Metadata } from "next";
+import { AboutContent } from "./about-content";
 
-import { motion } from "framer-motion";
-
-const fields = [
-  { label: "الاسم", value: "Dahak Abdellah" },
-  { label: "البلد", value: "الجزائر" },
-  { label: "الخبرة", value: "1 - 3 سنوات" },
-  { label: "التقنية الأساسية", value: "C#" },
-  { label: "التخصص", value: "تطبيقات الهاتف و سطح المكتب، ألعاب، مواقع ويب" },
-  { label: "الاهتمام", value: "المصادر المفتوحة" },
-];
+export const metadata: Metadata = {
+  title: "من أنا — Dahak Abdellah | داهك عبدالله",
+  description:
+    "تعرف على Dahak Abdellah (داهك عبدالله)، مطور برمجيات من الجزائر متخصص في تطبيقات سطح المكتب، التطبيقات المحمولة، الألعاب، والمصادر المفتوحة.",
+  alternates: {
+    canonical: "https://dahak-studio.vercel.app/about",
+  },
+  openGraph: {
+    title: "Dahak Abdellah — مطور برمجيات | DAHAK Studio",
+    description:
+      "مطور برمجيات من الجزائر. متخصص في تطبيقات سطح المكتب، التطبيقات المحمولة، الألعاب، والمصادر المفتوحة.",
+    url: "https://dahak-studio.vercel.app/about",
+  },
+};
 
 export default function AboutPage() {
-  return (
-    <div className="pt-24 pb-16">
-      <div className="mx-auto max-w-2xl px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-cyan uppercase">
-            // من أنا
-          </p>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Dahak Abdellah
-          </h1>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-10 glass-card rounded border relative"
-        >
-          <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-cyan/25" />
-          <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-cyan/25" />
-          <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-cyan/25" />
-          <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-cyan/25" />
-
-          {fields.map((field, i) => (
-            <div
-              key={field.label}
-              className={`flex items-center justify-between px-6 py-4 ${
-                i < fields.length - 1 ? "border-b border-border/30" : ""
-              }`}
-            >
-              <span className="text-sm text-muted-foreground/60">{field.label}</span>
-              <span className="font-medium text-foreground/90">{field.value}</span>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-    </div>
-  );
+  return <AboutContent />;
 }
