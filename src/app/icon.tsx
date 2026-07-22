@@ -23,32 +23,52 @@ export default function Icon() {
       >
         <div
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            border: "1px solid rgba(0,240,255,0.3)",
-            borderRadius: "20px",
+            width: "140px",
+            height: "140px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "12px",
+            border: "1.5px solid rgba(0,240,255,0.3)",
+            backgroundColor: "rgba(0,240,255,0.08)",
+            position: "relative",
           }}
-        />
-        <svg width="100" height="100" viewBox="0 0 32 32">
-          <path
-            d="M8 8h10a6 6 0 0 1 0 12H8V8z"
-            fill="none"
-            stroke="#00f0ff"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        >
+          <span
+            style={{
+              fontSize: "80px",
+              fontWeight: "bold",
+              color: "#00f0ff",
+              fontFamily: "system-ui, sans-serif",
+            }}
+          >
+            D
+          </span>
+          {/* Corner TL */}
+          <div
+            style={{
+              position: "absolute",
+              top: "-2px",
+              left: "-2px",
+              width: "10px",
+              height: "10px",
+              borderTop: "2px solid rgba(0,240,255,0.6)",
+              borderLeft: "2px solid rgba(0,240,255,0.6)",
+            }}
           />
-          <line
-            x1="8" y1="8" x2="8" y2="24"
-            stroke="#00f0ff"
-            strokeWidth="2.5"
-            strokeLinecap="round"
+          {/* Corner BR */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "-2px",
+              right: "-2px",
+              width: "10px",
+              height: "10px",
+              borderBottom: "2px solid rgba(0,240,255,0.6)",
+              borderRight: "2px solid rgba(0,240,255,0.6)",
+            }}
           />
-          <circle cx="16" cy="14" r="1.2" fill="#00f0ff" />
-        </svg>
+        </div>
       </div>
     ),
     {
