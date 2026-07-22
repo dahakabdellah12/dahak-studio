@@ -148,6 +148,8 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon.png" type="image/png" sizes="512x512" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="application-name" content="DAHAK Studio" />
         <meta name="theme-color" content="#0a0a0f" />
         <meta name="google-site-verification" content="tUaJoPMXaqDNY6R-Z3CeHNuaSdo9Xwhk0_LhEEyMPLo" />
         <script
